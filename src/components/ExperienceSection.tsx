@@ -109,11 +109,11 @@ const ExperienceSection = () => {
 
         <div className="relative w-full max-w-7xl mx-auto px-6">
           {/* Timeline line */}
-          <div className="absolute left-1/2 transform -translate-x-1/2 w-0.5 h-[70vh] bg-gradient-to-b from-purple-500/20 via-purple-500/50 to-purple-500/20"></div>
+          <div className="hidden md:block absolute left-1/2 transform -translate-x-1/2 w-0.5 h-[60vh] sm:h-[70vh] bg-gradient-to-b from-purple-500/20 via-purple-500/50 to-purple-500/20"></div>
           
           {/* Progress indicator */}
           <motion.div 
-            className="absolute left-1/2 transform -translate-x-1/2 w-1 bg-gradient-to-b from-purple-500 to-pink-500"
+            className="hidden md:block absolute left-1/2 transform -translate-x-1/2 w-1 bg-gradient-to-b from-purple-500 to-pink-500"
             style={{
               height: useTransform(scrollYProgress, [0, 1], ["0%", "70vh"]),
               top: 0
@@ -135,7 +135,7 @@ const ExperienceSection = () => {
               >
                 {/* Timeline dot */}
                 <motion.div 
-                  className="absolute left-1/2 transform -translate-x-1/2 w-6 h-6 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full border-4 border-black z-20"
+                  className="hidden md:block absolute left-1/2 transform -translate-x-1/2 w-6 h-6 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full border-4 border-black z-20"
                   style={{ scale: transforms[index].scale }}
                 >
                   <motion.div 

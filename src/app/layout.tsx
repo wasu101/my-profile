@@ -3,7 +3,6 @@ import { Anuphan } from "next/font/google";
 import "./globals.css";
 
 import Footer from "@/components/Footer";
-import GalaxyBackground from "@/components/GalaxyBackground";
 import ParticlesBackground from "@/components/ParticlesBackground";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 
@@ -31,7 +30,6 @@ export default function RootLayout({
       >
         <LanguageProvider>
           <div className="min-h-screen relative">
-            <GalaxyBackground />
             <ParticlesBackground />
             <main className="flex-grow relative z-10">
               {children}
