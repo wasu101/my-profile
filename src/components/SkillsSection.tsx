@@ -1,4 +1,5 @@
 'use client';
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { CpuChipIcon } from "@heroicons/react/24/outline";
@@ -140,10 +141,12 @@ const SkillsSection = () => {
                   <div className="flex flex-col items-center gap-2 flex-1 justify-center">
                     {/* Icon */}
                     <div className="relative w-12 h-12 rounded-xl bg-gradient-to-br from-white/10 to-white/5 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 flex-shrink-0">
-                      <img 
+                      <Image 
                         src={skill.image} 
                         alt={skill.name} 
-                        className="w-8 h-8 object-contain"
+                        width={32}
+                        height={32}
+                        className="object-contain"
                         style={{
                           filter: skill.invertColor 
                             ? 'brightness(0) invert(1)' 
