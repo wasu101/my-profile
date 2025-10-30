@@ -41,7 +41,7 @@ const HeroSection = () => {
             </div>
             
             <motion.div 
-              className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center lg:justify-start"
+              className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center lg:justify-start mb-8"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 1, duration: 0.8 }}
@@ -59,6 +59,42 @@ const HeroSection = () => {
               >
                 <Link href="#projects">{t('ดูผลงาน', 'View Projects')}</Link>
               </Button>
+            </motion.div>
+
+            {/* Quick Stats */}
+            <motion.div
+              className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1.5, duration: 0.8 }}
+            >
+              <div className="text-center">
+                <div className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">5+</div>
+                <div className="text-xs sm:text-sm text-gray-400">{t('ปีประสบการณ์', 'Years Experience')}</div>
+              </div>
+              <div className="text-center">
+                <div className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">20+</div>
+                <div className="text-xs sm:text-sm text-gray-400">{t('โปรเจค', 'Projects')}</div>
+              </div>
+              <div className="text-center">
+                <div className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-green-400 to-teal-400 bg-clip-text text-transparent">15+</div>
+                <div className="text-xs sm:text-sm text-gray-400">{t('เทคโนโลยี', 'Technologies')}</div>
+              </div>
+              <div className="text-center">
+                <div className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent">10+</div>
+                <div className="text-xs sm:text-sm text-gray-400">{t('ลูกค้า', 'Clients')}</div>
+              </div>
+            </motion.div>
+
+            {/* Availability Status */}
+            <motion.div
+              className="flex items-center justify-center lg:justify-start gap-2 text-sm text-green-400"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 2, duration: 0.8 }}
+            >
+              <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+              <span>{t('พร้อมรับงาน Freelance', 'Available for Freelance')}</span>
             </motion.div>
           </motion.div>
           
@@ -105,6 +141,27 @@ const HeroSection = () => {
               />
               
             </div>
+            
+            {/* Quick Skills Badges */}
+            <motion.div
+              className="absolute -bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2 flex-wrap justify-center"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1.8, duration: 0.8 }}
+            >
+              {['React', 'Python', 'AWS', 'Next.js'].map((skill, index) => (
+                <motion.span
+                  key={skill}
+                  className="px-2 py-1 text-xs bg-white/10 backdrop-blur-sm border border-white/20 rounded-full text-white"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 2 + index * 0.1 }}
+                  whileHover={{ scale: 1.05 }}
+                >
+                  {skill}
+                </motion.span>
+              ))}
+            </motion.div>
             
             {/* Floating particles around image - responsive sizes */}
             <motion.div

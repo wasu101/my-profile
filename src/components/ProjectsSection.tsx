@@ -9,52 +9,46 @@ const ProjectsSection = () => {
 
   const projects = [
     {
-      title: "Face Recognition System",
-      description: t("ระบบจดจำใบหน้าสำหรับการลงเวลาและรักษาความปลอดภัย", "Face recognition system for time attendance and security"),
-      tech: ["Python", "OpenCV", "Machine Learning", "FastAPI"],
-      demoLink: "/demo/face-recognition",
-      githubLink: "https://github.com/wasu101/Face_recognition",
-      image: "/images/projects/face-recognition.jpg"
+      title: "MKS Support System",
+      description: t("ระบบ Support และบริการลูกค้าสำหรับ MKS พร้อมการจัดการคำร้องและติดตาม", "MKS Support and customer service system with request management and tracking"),
+      tech: ["Next.js", "FastAPI", "PostgreSQL", "TypeScript", "shadcn/ui", "Docker", "Tailwind CSS"],
+      demoLink: "https://mks.support"
     },
     {
-      title: "MKS Jewelry Web Application",
-      description: t("พัฒนาเว็บแอปพลิเคชันสำหรับบริษัท MKS Jewelry ด้วย FastAPI และ Django", "Developed web application for MKS Jewelry using FastAPI and Django"),
-      tech: ["Python", "FastAPI", "Django", "HTML/CSS", "PostgreSQL"],
-      demoLink: "/demo/mks-jewelry",
-      githubLink: "https://github.com/wasu101/mks-jewelry",
-      image: "/images/projects/mks-jewelry.jpg"
+      title: "Brandex Shop E-Commerce",
+      description: t("แพลตฟอร์มอีคอมเมิร์ซสำหรับ Brandex พร้อมระบบการขายและจัดการสินค้า", "E-commerce platform for Brandex with sales system and inventory management"),
+      tech: ["Next.js", "FastAPI", "PostgreSQL", "TypeScript", "shadcn/ui", "Docker", "Tailwind CSS"],
+      demoLink: "https://shop.brandex.co.th"
     },
     {
-      title: "IT Infrastructure Management",
-      description: t("ระบบจัดการและดูแล Server, CCTV, Fingerprint ภายในองค์กร", "System for managing Server, CCTV, Fingerprint within organization"),
-      tech: ["Server Management", "Network", "Database", "Docker"],
-      demoLink: "/demo/infrastructure-management",
-      githubLink: "https://github.com/wasu101/infrastructure-management",
-      image: "/images/projects/infrastructure.jpg"
+      title: "Pages Thai Website",
+      description: t("เว็บไซต์สำหรับบริการ Pages Thai พร้อมระบบจัดการเนื้อหาและผู้ใช้", "Website for Pages Thai service with content management and user system"),
+      tech: ["Next.js", "FastAPI", "PostgreSQL", "TypeScript", "Material-UI", "Docker", "Tailwind CSS"],
+      demoLink: "https://pagesthai.com"
     },
     {
-      title: "Admin Dashboard System",
-      description: t("ระบบจัดการผู้ดูแลระบบแบบครบวงจร พร้อมการจัดการผู้ใช้และสิทธิ์", "Complete admin management system with user management and permissions"),
-      tech: ["React", "Next.js", "TypeScript", "Prisma", "PostgreSQL"],
-      demoLink: "/demo/admin-dashboard",
-      githubLink: "https://github.com/wasu101/admin-dashboard",
-      image: "/images/projects/admin-dashboard.jpg"
+      title: "Brandex CRM System",
+      description: t("ระบบ CRM สำหรับจัดการลูกค้าและการขายของ Brandex อย่างครบวงจร", "Complete CRM system for Brandex customer and sales management"),
+      tech: ["Next.js", "FastAPI", "PostgreSQL", "TypeScript", "shadcn/ui", "Docker", "Tailwind CSS"],
+      demoLink: "https://crm.brandex.co.th"
     },
     {
-      title: "Authentication System",
-      description: t("ระบบล็อกอินและการจัดการผู้ใช้แบบปลอดภัย พร้อม JWT และ OAuth", "Secure login and user management system with JWT and OAuth integration"),
-      tech: ["Node.js", "Express", "JWT", "OAuth", "MongoDB", "Redis"],
-      demoLink: "/demo/auth-system",
-      githubLink: "https://github.com/wasu101/auth-system",
-      image: "/images/projects/auth-system.jpg"
+      title: "MTNet Service Website",
+      description: t("เว็บไซต์บริการ MTNet Service พร้อมข้อมูลบริการและระบบจัดการ", "MTNet Service website with service information and management system"),
+      tech: ["Next.js", "AWS Amplify", "TypeScript", "Tailwind CSS"],
+      demoLink: "https://www.mtnetservice.com"
     },
     {
-      title: "E-Commerce Platform",
-      description: t("แพลตฟอร์มอีคอมเมิร์ซครบวงจร พร้อมระบบชำระเงินและจัดการสินค้า", "Complete e-commerce platform with payment system and inventory management"),
-      tech: ["Next.js", "Stripe", "Prisma", "PostgreSQL", "Tailwind CSS"],
-      demoLink: "/demo/ecommerce",
-      githubLink: "https://github.com/wasu101/ecommerce-platform",
-      image: "/images/projects/ecommerce.jpg"
+      title: "PP Electricity Corporate Website",
+      description: t("เว็บไซต์องค์กรสำหรับ PP Electricity พร้อมข้อมูลบริษัทและบริการ", "Corporate website for PP Electricity with company information and services"),
+      tech: ["Next.js", "AWS Amplify", "Amazon S3", "AWS Cognito", "Tailwind CSS"],
+      demoLink: "https://pp-electricity.com"
+    },
+    {
+      title: "PP Electricity Mail System",
+      description: t("ระบบจัดการอีเมลสำหรับ PP Electricity พร้อม Webmail และการจัดการบัญชี", "Email management system for PP Electricity with Webmail and account management"),
+      tech: ["Mailu", "Amazon EC2", "Docker"],
+      demoLink: "https://mail.pp-electricity.com"
     }
   ];
 

@@ -12,12 +12,11 @@ interface ProjectCardProps {
   description: string;
   tech: string[];
   demoLink: string;
-  githubLink: string;
   image?: string;
   index: number;
 }
 
-const ProjectCard = ({ title, description, tech, demoLink, githubLink, image, index }: ProjectCardProps) => {
+const ProjectCard = ({ title, description, tech, demoLink, image, index }: ProjectCardProps) => {
   const cardRef = useRef<HTMLDivElement>(null);
   
   const { scrollYProgress } = useScroll({
@@ -40,28 +39,47 @@ const ProjectCard = ({ title, description, tech, demoLink, githubLink, image, in
       'JavaScript': 'https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-original.svg',
       'Node.js': 'https://raw.githubusercontent.com/devicons/devicon/master/icons/nodejs/nodejs-original.svg',
       'PostgreSQL': 'https://raw.githubusercontent.com/devicons/devicon/master/icons/postgresql/postgresql-original.svg',
+      'MySQL': 'https://raw.githubusercontent.com/devicons/devicon/master/icons/mysql/mysql-original.svg',
       'MongoDB': 'https://raw.githubusercontent.com/devicons/devicon/master/icons/mongodb/mongodb-original.svg',
       'OpenCV': 'https://raw.githubusercontent.com/devicons/devicon/master/icons/opencv/opencv-original.svg',
       'Docker': 'https://raw.githubusercontent.com/devicons/devicon/master/icons/docker/docker-original.svg',
       'Tailwind CSS': 'https://raw.githubusercontent.com/devicons/devicon/master/icons/tailwindcss/tailwindcss-original.svg',
       'HTML/CSS': 'https://raw.githubusercontent.com/devicons/devicon/master/icons/html5/html5-original.svg',
+      'CSS': 'https://raw.githubusercontent.com/devicons/devicon/master/icons/css3/css3-original.svg',
       'Machine Learning': 'https://raw.githubusercontent.com/devicons/devicon/master/icons/tensorflow/tensorflow-original.svg',
       'Express': 'https://raw.githubusercontent.com/devicons/devicon/master/icons/express/express-original.svg',
       'JWT': 'https://raw.githubusercontent.com/devicons/devicon/master/icons/jwt/jwt-original.svg',
+      'OAuth': 'https://raw.githubusercontent.com/devicons/devicon/master/icons/oauth/oauth-original.svg',
       'Redis': 'https://raw.githubusercontent.com/devicons/devicon/master/icons/redis/redis-original.svg',
+      'Stripe': 'https://raw.githubusercontent.com/devicons/devicon/master/icons/stripe/stripe-original.svg',
       'Prisma': 'https://raw.githubusercontent.com/devicons/devicon/master/icons/prisma/prisma-original.svg',
+      'WordPress': 'https://raw.githubusercontent.com/devicons/devicon/master/icons/wordpress/wordpress-original.svg',
+      'PHP': 'https://raw.githubusercontent.com/devicons/devicon/master/icons/php/php-original.svg',
+      'Linux': 'https://raw.githubusercontent.com/devicons/devicon/master/icons/linux/linux-original.svg',
+      'Postfix': 'https://raw.githubusercontent.com/devicons/devicon/master/icons/linux/linux-original.svg',
+      'Dovecot': 'https://raw.githubusercontent.com/devicons/devicon/master/icons/linux/linux-original.svg',
+      'Roundcube': 'https://raw.githubusercontent.com/devicons/devicon/master/icons/php/php-original.svg',
+      'Responsive Design': 'https://raw.githubusercontent.com/devicons/devicon/master/icons/css3/css3-original.svg',
+      'Server Management': 'https://raw.githubusercontent.com/devicons/devicon/master/icons/linux/linux-original.svg',
+      'Network': 'https://raw.githubusercontent.com/devicons/devicon/master/icons/linux/linux-original.svg',
+      'Database': 'https://raw.githubusercontent.com/devicons/devicon/master/icons/postgresql/postgresql-original.svg',
       'SQLite': 'https://raw.githubusercontent.com/devicons/devicon/master/icons/sqlite/sqlite-original.svg',
-      'MySQL': 'https://raw.githubusercontent.com/devicons/devicon/master/icons/mysql/mysql-original.svg',
       'Git': 'https://raw.githubusercontent.com/devicons/devicon/master/icons/git/git-original.svg',
       'Flask': 'https://raw.githubusercontent.com/devicons/devicon/master/icons/flask/flask-original.svg',
-      'WordPress': 'https://raw.githubusercontent.com/devicons/devicon/master/icons/wordpress/wordpress-original.svg'
+      'shadcn/ui': 'https://raw.githubusercontent.com/devicons/devicon/master/icons/react/react-original.svg',
+      'Material-UI': 'https://raw.githubusercontent.com/devicons/devicon/master/icons/materialui/materialui-original.svg',
+      'AWS Amplify': 'https://raw.githubusercontent.com/devicons/devicon/master/icons/amazonwebservices/amazonwebservices-original-wordmark.svg',
+      'Amazon S3': 'https://raw.githubusercontent.com/devicons/devicon/master/icons/amazonwebservices/amazonwebservices-original-wordmark.svg',
+      'AWS Cognito': 'https://raw.githubusercontent.com/devicons/devicon/master/icons/amazonwebservices/amazonwebservices-original-wordmark.svg',
+      'Amazon EC2': 'https://raw.githubusercontent.com/devicons/devicon/master/icons/amazonwebservices/amazonwebservices-original-wordmark.svg',
+      'Mailu': 'https://raw.githubusercontent.com/devicons/devicon/master/icons/docker/docker-original.svg'
     };
     return logoMap[techName] || 'https://raw.githubusercontent.com/devicons/devicon/master/icons/devicon/devicon-original.svg';
   };
 
   // เช็คว่าควร invert color หรือไม่
   const shouldInvertColor = (techName: string) => {
-    const invertList = ['Django', 'Next.js', 'Express', 'Flask', 'WordPress', 'Prisma'];
+    const invertList = ['Django', 'Next.js', 'Express', 'Flask', 'WordPress', 'Prisma', 'JWT', 'OAuth', 'shadcn/ui'];
     return invertList.includes(techName);
   };
   
@@ -167,27 +185,16 @@ const ProjectCard = ({ title, description, tech, demoLink, githubLink, image, in
           </div>
         </CardContent>
 
-        <CardFooter className="gap-3 pt-0">
+        <CardFooter className="pt-0">
           <Button 
             variant="outline" 
             size="sm"
-            className="flex-1 border-purple-500/50 text-purple-400 hover:bg-purple-500/10 hover:text-purple-300 transition-all" 
+            className="w-full border-purple-500/50 text-purple-400 hover:bg-purple-500/10 hover:text-purple-300 transition-all" 
             asChild
           >
-            <a href={demoLink} className="flex items-center gap-2">
+            <a href={demoLink} className="flex items-center justify-center gap-2" target="_blank" rel="noopener noreferrer">
               <EyeIcon className="w-4 h-4" />
-              Demo
-            </a>
-          </Button>
-          <Button 
-            variant="outline" 
-            size="sm"
-            className="flex-1 border-pink-500/50 text-pink-400 hover:bg-pink-500/10 hover:text-pink-300 transition-all" 
-            asChild
-          >
-            <a href={githubLink} className="flex items-center gap-2" target="_blank" rel="noopener noreferrer">
-              <CodeBracketIcon className="w-4 h-4" />
-              Code
+              Live Site
             </a>
           </Button>
         </CardFooter>

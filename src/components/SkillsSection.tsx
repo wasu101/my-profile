@@ -1,7 +1,5 @@
 'use client';
-import SkillCard from './SkillCard';
 import { motion } from "framer-motion";
-import { useEffect, useRef } from 'react';
 import { useLanguage } from "@/contexts/LanguageContext";
 import { CpuChipIcon } from "@heroicons/react/24/outline";
 
@@ -83,36 +81,21 @@ const SkillsSection = () => {
       name: 'Git', 
       image: 'https://raw.githubusercontent.com/devicons/devicon/master/icons/git/git-original.svg',
       description: t('Version Control System สำหรับจัดการ Source Code และทำงานเป็นทีม', 'Version Control System for source code management and team collaboration')
+    },
+    { 
+      name: 'AWS', 
+      image: 'https://raw.githubusercontent.com/devicons/devicon/master/icons/amazonwebservices/amazonwebservices-original-wordmark.svg',
+      description: t('Cloud Platform สำหรับ Deploy และจัดการ Infrastructure แบบ Scalable', 'Cloud Platform for scalable Infrastructure deployment and management')
+    },
+    { 
+      name: 'Node.js', 
+      image: 'https://raw.githubusercontent.com/devicons/devicon/master/icons/nodejs/nodejs-original.svg',
+      description: t('JavaScript Runtime สำหรับ Backend Development และ Server-side Applications', 'JavaScript Runtime for Backend Development and Server-side Applications')
     }
   ];
 
-  const sectionRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (!sectionRef.current) return;
-      
-      const cards = sectionRef.current.querySelectorAll('.skill-card');
-      
-      cards.forEach((card) => {
-        const cardElement = card as HTMLElement;
-        const rect = cardElement.getBoundingClientRect();
-        const centerY = rect.top + rect.height / 2;
-        const screenCenterY = window.innerHeight / 2;
-        const distance = Math.abs(centerY - screenCenterY);
-        const maxDistance = window.innerHeight / 2;
-        const scale = 1 - (distance / maxDistance) * 0.1;
-        
-        cardElement.style.transform = `scale(${Math.max(0.9, scale)})`;
-      });
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
   return (
-    <section id="skills" className="px-6 py-20" ref={sectionRef}>
+    <section id="skills" className="px-6 py-20">
       <div className="max-w-7xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -123,21 +106,114 @@ const SkillsSection = () => {
         >
           <CpuChipIcon className="w-8 h-8 text-purple-400" />
           <h3 className="text-3xl font-bold bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
-            {t('ทักษะและเทคโนโลยี', 'Skills & Technologies')}
+            {t('เทคโนโลยีที่ใช้', 'Tech Stack')}
           </h3>
         </motion.div>
-        <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-4">
-          {skills.map((skill, index) => (
-            <div key={skill.name} className="skill-card transition-transform duration-300">
-              <SkillCard 
-                name={skill.name} 
-                imagePath={skill.image} 
-                index={index} 
-                invertColor={skill.invertColor}
-                description={skill.description}
+        <div className="relative">
+          {/* Floating Tech Stack Display */}
+          <div className="flex flex-wrap justify-center gap-6 max-w-6xl mx-auto">
+            {skills.map((skill, index) => (
+              <motion.div
+                key={skill.name}
+                initial={{ opacity: 0, scale: 0.8, y: 20 }}
+                whileInView={{ opacity: 1, scale: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ 
+                  duration: 0.5, 
+                  delay: index * 0.05,
+                  type: "spring",
+                  stiffness: 300,
+                  damping: 20
+                }}
+                whileHover={{ 
+                  scale: 1.1, 
+                  y: -8,
+                  transition: { duration: 0.2 }
+                }}
+                className="group relative"
+              >
+                {/* Glow effect */}
+                <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl opacity-0 group-hover:opacity-75 blur-lg transition-opacity duration-500" />
+                
+                {/* Main badge */}
+                <div className="relative bg-black/50 backdrop-blur-xl border border-white/10 rounded-2xl p-4 hover:border-purple-500/50 transition-all duration-300 group-hover:bg-black/70 w-24 h-28 flex flex-col items-center justify-between">
+                  <div className="flex flex-col items-center gap-2 flex-1 justify-center">
+                    {/* Icon */}
+                    <div className="relative w-12 h-12 rounded-xl bg-gradient-to-br from-white/10 to-white/5 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 flex-shrink-0">
+                      <img 
+                        src={skill.image} 
+                        alt={skill.name} 
+                        className="w-8 h-8 object-contain"
+                        style={{
+                          filter: skill.invertColor 
+                            ? 'brightness(0) invert(1)' 
+                            : 'none'
+                        }}
+                      />
+                      
+                      {/* Pulse effect on hover */}
+                      <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-purple-500/20 to-pink-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                    </div>
+                    
+                    {/* Name */}
+                    <span className="text-xs font-medium text-gray-300 group-hover:text-white transition-colors duration-300 text-center leading-tight">
+                      {skill.name}
+                    </span>
+                  </div>
+                  
+                  {/* Skill level indicator */}
+                  <div className="flex gap-1 mt-2">
+                    {[...Array(4)].map((_, i) => (
+                      <motion.div
+                        key={i}
+                        initial={{ scale: 0 }}
+                        whileInView={{ scale: 1 }}
+                        transition={{ delay: index * 0.05 + i * 0.1 }}
+                        className="w-1 h-1 rounded-full bg-gradient-to-r from-purple-500 to-pink-500"
+                      />
+                    ))}
+                  </div>
+                  
+                  {/* Tooltip on hover */}
+                  <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-10">
+                    <div className="bg-black/90 text-white text-xs rounded-lg px-3 py-2 max-w-xs text-center border border-purple-500/30">
+                      {skill.description}
+                      <div className="absolute top-full left-1/2 transform -translate-x-1/2 border-4 border-transparent border-t-black/90" />
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+          
+          {/* Animated background elements */}
+          <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            {[...Array(3)].map((_, i) => (
+              <motion.div
+                key={i}
+                className="absolute w-32 h-32 rounded-full"
+                style={{
+                  background: `radial-gradient(circle, ${
+                    i === 0 ? 'rgba(168, 85, 247, 0.1)' : 
+                    i === 1 ? 'rgba(236, 72, 153, 0.1)' : 
+                    'rgba(59, 130, 246, 0.1)'
+                  } 0%, transparent 70%)`,
+                  left: `${20 + i * 30}%`,
+                  top: `${10 + i * 20}%`,
+                }}
+                animate={{
+                  x: [0, 30, 0],
+                  y: [0, -20, 0],
+                  scale: [1, 1.2, 1],
+                }}
+                transition={{
+                  duration: 8 + i * 2,
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }}
               />
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
     </section>

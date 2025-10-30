@@ -22,6 +22,12 @@ const SkillCard = ({ name, imagePath, index, invertColor = false, description }:
   const [isHovered, setIsHovered] = useState(false);
   const [displayText, setDisplayText] = useState('');
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [particlePositions, setParticlePositions] = useState<number[]>([]);
+  
+  // Initialize particle positions only on client side to prevent hydration mismatch
+  useEffect(() => {
+    setParticlePositions([...Array(3)].map(() => Math.random() * 100));
+  }, []);
   
   useEffect(() => {
     if (isHovered && description) {
@@ -59,12 +65,12 @@ const SkillCard = ({ name, imagePath, index, invertColor = false, description }:
           >
             {/* Floating particles effect */}
             <div className="absolute inset-0 overflow-hidden rounded-2xl">
-              {[...Array(3)].map((_, i) => (
+              {particlePositions.length > 0 && particlePositions.map((position, i) => (
                 <motion.div
                   key={i}
                   className="absolute w-1 h-1 bg-purple-400 rounded-full"
                   initial={{
-                    x: Math.random() * 100,
+                    x: position,
                     y: 100,
                     opacity: 0
                   }}

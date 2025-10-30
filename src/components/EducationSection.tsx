@@ -1,52 +1,53 @@
 'use client';
 import { Card, CardContent } from "@/components/ui/card";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { Badge } from "@/components/ui/badge";
+import { motion } from "framer-motion";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { AcademicCapIcon } from "@heroicons/react/24/outline";
-import { useRef } from "react";
+import { AcademicCapIcon, CalendarIcon, MapPinIcon, TrophyIcon, BuildingLibraryIcon, BookOpenIcon, DocumentTextIcon } from "@heroicons/react/24/outline";
 
 const EducationSection = () => {
   const { t } = useLanguage();
-  const sectionRef = useRef<HTMLDivElement>(null);
-  
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start center", "end center"]
-  });
-  
-  const lineHeight = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
 
   const education = [
     {
       degree: t('ปริญญาตรี วิทยาศาสตรบัณฑิต (วท.บ)', 'Bachelor of Science (B.Sc.)'),
       field: t('วิทยาการคอมพิวเตอร์', 'Computer Science'),
       school: t('มหาวิทยาลัยสุโขทัยธรรมาธิราช', 'Sukhothai Thammathirat Open University'),
+      shortName: 'STOU',
       year: t('คาดว่าจะจบ 2571', 'Expected 2028'),
       yearNumber: '2571',
-      status: 'ongoing'
+      status: 'ongoing',
+      level: 'bachelor',
+      icon: BuildingLibraryIcon
     },
     {
       degree: t('ประกาศนียบัตรวิชาชีพชั้นสูง (ปวส.)', 'High Vocational Certificate'),
       field: t('คอมพิวเตอร์ธุรกิจ', 'Business Computer'),
-      school: t('วิทยาลัยการอาชีพเกษตรวิสัย', 'Kaset Wisai Vocational College'),
+      school: t('วิทยาลัยอุตสาหกรรมและสื่อสารเกษตรวิสัย', 'Kasetwisai Industry Communication College'),
+      shortName: 'KICC',
       year: t('2562', '2019'),
       yearNumber: '2562',
       gpa: '3.47',
-      status: 'completed'
+      status: 'completed',
+      level: 'diploma',
+      icon: BookOpenIcon
     },
     {
       degree: t('ประกาศนียบัตรวิชาชีพ (ปวช.)', 'Vocational Certificate'),
       field: t('คอมพิวเตอร์ธุรกิจ', 'Business Computer'),
       school: t('วิทยาลัยพณิชยการบางนา', 'Bangna Commercial College'),
+      shortName: 'BNCC',
       year: t('2560', '2017'),
       yearNumber: '2560',
       gpa: '2.38',
-      status: 'completed'
+      status: 'completed',
+      level: 'certificate',
+      icon: DocumentTextIcon
     }
   ];
 
   return (
-    <section id="education" className="px-6 py-20 relative" ref={sectionRef}>
+    <section id="education" className="px-6 py-20 relative">
       <div className="max-w-7xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -61,118 +62,90 @@ const EducationSection = () => {
           </h3>
         </motion.div>
         
-        <div className="relative max-w-4xl mx-auto">
-          {/* Timeline line background */}
-          <div className="absolute left-1/2 transform -translate-x-1/2 w-0.5 h-full bg-gradient-to-b from-purple-500/20 to-pink-500/20"></div>
-          
-          {/* Animated timeline line */}
-          <motion.div 
-            className="absolute left-1/2 transform -translate-x-1/2 w-0.5 bg-gradient-to-b from-purple-500 to-pink-500"
-            style={{ 
-              height: lineHeight,
-              top: 0
-            }}
-          />
-          
-          <div className="space-y-16">
-            {education.map((edu, index) => (
-              <motion.div
-                key={edu.school}
-                initial={{ opacity: 0, scale: 0.8 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.2, duration: 0.5 }}
-                className="relative"
-              >
-                {/* Year label */}
-                <motion.div 
-                  className="absolute left-1/2 transform -translate-x-1/2 -top-8 z-20"
-                  initial={{ opacity: 0, y: -10 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.2 + 0.3 }}
-                >
-                  <div className={`px-4 py-2 rounded-full text-sm font-bold backdrop-blur-md ${
-                    edu.status === 'ongoing' 
-                      ? 'bg-gradient-to-r from-purple-500/90 to-pink-500/90 text-white ring-2 ring-purple-500/30' 
-                      : 'bg-white/5 text-gray-300 border border-white/20'
-                  }`}>
-                    {edu.yearNumber}
-                  </div>
-                </motion.div>
-                
-                {/* Timeline dot */}
-                <motion.div 
-                  className="absolute left-1/2 transform -translate-x-1/2 top-0 w-6 h-6 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full border-4 border-black z-10"
-                  initial={{ scale: 0 }}
-                  whileInView={{ scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.2 + 0.2, type: "spring", stiffness: 200 }}
-                >
-                  {edu.status === 'ongoing' && (
-                    <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full animate-ping"></div>
-                  )}
-                </motion.div>
-                
-                {/* Content card */}
-                <div className="pt-8">
-                  <Card className="bg-white/5 backdrop-blur-lg border-white/10 hover:bg-white/10 transition-all hover:scale-105">
-                    <CardContent className="p-6 text-center">
-                      <h4 className="text-xl font-bold text-white mb-2">{edu.degree}</h4>
-                      <p className="text-purple-400 font-semibold mb-1">{edu.field}</p>
-                      <p className="text-gray-400 mb-2">{edu.school}</p>
-                      <div className="flex justify-center gap-4 text-sm">
-                        <p className="text-gray-300">{edu.year}</p>
-                        {edu.gpa && <p className="text-green-400">GPA: {edu.gpa}</p>}
-                      </div>
-                    </CardContent>
-                  </Card>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-          
-          {/* Additional certification */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.6, duration: 0.5 }}
-            className="mt-16 relative"
-          >
-            <motion.div 
-              className="absolute left-1/2 transform -translate-x-1/2 -top-8"
-              initial={{ opacity: 0, y: -10 }}
+        {/* Modern Grid Layout */}
+        <div className="grid lg:grid-cols-3 gap-8">
+          {education.map((edu, index) => (
+            <motion.div
+              key={edu.school}
+              initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: 0.8 }}
+              transition={{ delay: index * 0.1, duration: 0.5 }}
+              className="relative group"
             >
-              <div className="px-4 py-2 bg-white/10 rounded-full text-sm font-bold text-gray-300">
-                2561
-              </div>
-            </motion.div>
-            
-            <motion.div 
-              className="absolute left-1/2 transform -translate-x-1/2 top-0 w-6 h-6 bg-white/20 rounded-full border-4 border-black z-10"
-              initial={{ scale: 0 }}
-              whileInView={{ scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.7, type: "spring", stiffness: 200 }}
-            />
-            
-            <div className="pt-8">
-              <Card className="bg-white/5 backdrop-blur-lg border-white/10 hover:bg-white/10 transition-all">
-                <CardContent className="p-6 text-center">
-                  <h4 className="text-lg font-bold text-white mb-2">
-                    {t('ประกาศนียบัตรเพิ่มเติม', 'Additional Certifications')}
-                  </h4>
-                  <p className="text-purple-400">{t('หลักสูตร Selling Skill', 'Selling Skill Course')}</p>
-                  <p className="text-gray-400">J.I.B Computer Group</p>
-                  <p className="text-gray-300 text-sm">{t('ตุลาคม 2561', 'October 2018')}</p>
+              {/* Status Badge */}
+              {edu.status === 'ongoing' && (
+                <div className="absolute -top-3 -right-3 z-10">
+                  <Badge className="bg-gradient-to-r from-purple-500 to-pink-500 text-white border-0 animate-pulse">
+                    {t('กำลังศึกษา', 'Ongoing')}
+                  </Badge>
+                </div>
+              )}
+
+              <Card className="bg-gradient-to-br from-white/5 to-white/10 backdrop-blur-lg border-white/10 hover:border-purple-500/50 transition-all duration-300 group-hover:scale-105 h-full">
+                <CardContent className="p-6 flex flex-col h-full">
+                  {/* Header with Icon */}
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-8 h-8 text-purple-400">
+                      <edu.icon className="w-full h-full" />
+                    </div>
+                    <div className="flex-1">
+                      <Badge 
+                        variant="outline" 
+                        className={`text-xs ${
+                          edu.level === 'bachelor' ? 'border-purple-500 text-purple-400' :
+                          edu.level === 'diploma' ? 'border-blue-500 text-blue-400' :
+                          'border-green-500 text-green-400'
+                        }`}
+                      >
+                        {edu.shortName}
+                      </Badge>
+                    </div>
+                  </div>
+
+                  {/* Degree Info */}
+                  <div className="flex-1">
+                    <h4 className="text-lg font-bold text-white mb-2 leading-tight">
+                      {edu.degree}
+                    </h4>
+                    <p className="text-purple-400 font-semibold mb-3">
+                      {edu.field}
+                    </p>
+                    <div className="space-y-2 text-sm">
+                      <div className="flex items-center gap-2 text-gray-300">
+                        <MapPinIcon className="w-4 h-4 text-gray-400" />
+                        <span>{edu.school}</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-gray-300">
+                        <CalendarIcon className="w-4 h-4 text-gray-400" />
+                        <span>{edu.year}</span>
+                      </div>
+                      {edu.gpa && (
+                        <div className="flex items-center gap-2">
+                          <TrophyIcon className="w-4 h-4 text-yellow-400" />
+                          <span className="text-yellow-400 font-semibold">
+                            GPA: {edu.gpa}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Bottom Decoration */}
+                  <div className="mt-4 pt-4 border-t border-white/10">
+                    <div className="flex justify-between items-center">
+                      <span className="text-xs text-gray-500 uppercase tracking-wider">
+                        {edu.status === 'ongoing' ? t('กำลังศึกษา', 'In Progress') : t('สำเร็จการศึกษา', 'Graduated')}
+                      </span>
+                      <div className="text-2xl font-bold text-white/20">
+                        {edu.yearNumber}
+                      </div>
+                    </div>
+                  </div>
                 </CardContent>
               </Card>
-            </div>
-          </motion.div>
+            </motion.div>
+          ))}
         </div>
       </div>
     </section>
