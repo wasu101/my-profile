@@ -3,7 +3,7 @@ import { Anuphan } from "next/font/google";
 import "./globals.css";
 
 import Footer from "@/components/Footer";
-import ParticlesBackground from "@/components/ParticlesBackground";
+//import ParticlesBackground from "@/components/ParticlesBackground";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 
 const kanit = Anuphan({
@@ -30,7 +30,7 @@ export default function RootLayout({
       >
         <LanguageProvider>
           <div className="min-h-screen relative">
-            <ParticlesBackground />
+            {/* <ParticlesBackground /> */}
             <main className="flex-grow relative z-10">
               {children}
             </main>
