@@ -19,6 +19,7 @@ export default function Home() {
   return (
     // MotionConfig reducedMotion="user" → framer-motion อ่านค่า OS เอง
     // ไม่ต้อง useReducedMotion() → ไม่มี hydration mismatch
+    /////////
     <MotionConfig reducedMotion="user">
       <div className="min-h-screen bg-zinc-950 text-white">
         {/* Fixed UI */}

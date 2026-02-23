@@ -8,7 +8,7 @@
 [![Framer Motion](https://img.shields.io/badge/Framer_Motion-Animation-ff69b4?style=for-the-badge&logo=framer)](https://www.framer.com/motion/)
 
 ## 👨‍💻 About Me
-
+า
 สวัสดีครับ! ผมชื่อ **วรกันต์ นาไทร** (แจ๊ค) เป็น IT Specialist และ Full Stack Developer ที่มีประสบการณ์ในการพัฒนาระบบต่างๆ
 
 ### 🎯 Current Focus
