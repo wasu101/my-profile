@@ -32,10 +32,10 @@ const ParticlesBackground = () => {
     const particleCount = 25; // ลดจำนวนลง
     const maxDistance = 150; // เพิ่มระยะห่าง
     const colors = [
-      { r: 147, g: 51, b: 234 },   // Purple
+      { r: 6, g: 182, b: 212 },    // Cyan
       { r: 79, g: 70, b: 229 },    // Indigo  
       { r: 59, g: 130, b: 246 },   // Blue
-      { r: 236, g: 72, b: 153 },   // Pink
+      { r: 20, g: 184, b: 166 },   // Teal
     ];
 
     // สร้าง particles

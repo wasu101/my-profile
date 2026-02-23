@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -107,8 +107,8 @@ export default function InfrastructureDemo() {
       category: "UI Components & Animation",
       items: [
         { name: "shadcn/ui", description: "Modern React components", color: "bg-slate-900 text-white" },
-        { name: "Radix UI", description: "Accessible UI primitives", color: "bg-purple-600 text-white" },
-        { name: "Framer Motion", description: "Animation library", color: "bg-pink-500 text-white" },
+        { name: "Radix UI", description: "Accessible UI primitives", color: "bg-cyan-600 text-white" },
+        { name: "Framer Motion", description: "Animation library", color: "bg-teal-500 text-white" },
         { name: "Heroicons", description: "SVG icon library", color: "bg-indigo-600 text-white" }
       ]
     },
@@ -196,7 +196,7 @@ export default function InfrastructureDemo() {
     const getColor = () => {
       switch (type) {
         case 'bandwidth': return 'stroke-blue-400 fill-blue-400/20';
-        case 'latency': return 'stroke-purple-400 fill-purple-400/20';
+        case 'latency': return 'stroke-cyan-400 fill-cyan-400/20';
         case 'cpu': return 'stroke-red-400 fill-red-400/20';
         case 'memory': return 'stroke-yellow-400 fill-yellow-400/20';
         case 'disk': return 'stroke-green-400 fill-green-400/20';
@@ -349,7 +349,7 @@ export default function InfrastructureDemo() {
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
+              <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-lg flex items-center justify-center">
                 <ServerIcon className="w-6 h-6 text-white" />
               </div>
               <div>
@@ -421,7 +421,7 @@ export default function InfrastructureDemo() {
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.5 }}
-                      className="bg-gradient-to-r from-blue-900/30 to-purple-900/30 border border-blue-700/50 rounded-lg p-6"
+                      className="bg-gradient-to-r from-blue-900/30 to-cyan-900/30 border border-blue-700/50 rounded-lg p-6"
                     >
                       <div className="flex items-start gap-3">
                         <InformationCircleIcon className="w-6 h-6 text-blue-400 flex-shrink-0 mt-1" />
@@ -439,7 +439,7 @@ export default function InfrastructureDemo() {
                             <Badge variant="outline" className="text-green-400 border-green-400">
                               📊 Real-time Data
                             </Badge>
-                            <Badge variant="outline" className="text-purple-400 border-purple-400">
+                            <Badge variant="outline" className="text-cyan-400 border-cyan-400">
                               📱 Responsive
                             </Badge>
                             <Badge variant="outline" className="text-orange-400 border-orange-400">
@@ -494,10 +494,10 @@ export default function InfrastructureDemo() {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-gray-400 text-sm">CCTV Cameras</p>
-                    <p className="text-3xl font-bold text-purple-400">4</p>
+                    <p className="text-3xl font-bold text-cyan-400">4</p>
                     <p className="text-xs text-green-400">↗ 3 recording</p>
                   </div>
-                  <VideoCameraIcon className="w-10 h-10 text-purple-400" />
+                  <VideoCameraIcon className="w-10 h-10 text-cyan-400" />
                 </div>
               </CardContent>
             </Card>
@@ -599,7 +599,7 @@ export default function InfrastructureDemo() {
                 <Card className="bg-gray-800/50 border-gray-700">
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
-                      <WifiIcon className="w-5 h-5 text-purple-400" />
+                      <WifiIcon className="w-5 h-5 text-cyan-400" />
                       Network Latency (24h)
                     </CardTitle>
                   </CardHeader>
@@ -607,7 +607,7 @@ export default function InfrastructureDemo() {
                     <LineChart data={networkMetrics} type="latency" />
                     <div className="mt-4 flex justify-between text-sm">
                       <span className="text-gray-400">Average: 13ms</span>
-                      <span className="text-purple-400">Best: 8ms</span>
+                      <span className="text-cyan-400">Best: 8ms</span>
                     </div>
                   </CardContent>
                 </Card>
@@ -731,7 +731,7 @@ export default function InfrastructureDemo() {
                               <span className="text-gray-400">Memory</span>
                               <span>{server.memory}%</span>
                             </div>
-                            <ProgressBar value={server.memory} color="bg-purple-500" />
+                            <ProgressBar value={server.memory} color="bg-cyan-500" />
                           </div>
                           <div>
                             <div className="flex justify-between text-sm mb-1">
@@ -789,7 +789,7 @@ export default function InfrastructureDemo() {
                             <span className="text-gray-400">Memory</span>
                             <span className="font-semibold">{server.memory}%</span>
                           </div>
-                          <ProgressBar value={server.memory} color="bg-purple-500" />
+                          <ProgressBar value={server.memory} color="bg-cyan-500" />
                         </div>
                         <div className="space-y-2">
                           <div className="flex justify-between">
@@ -819,7 +819,7 @@ export default function InfrastructureDemo() {
                     <CardContent className="p-6">
                       <div className="flex items-center justify-between mb-4">
                         <div className="flex items-center gap-3">
-                          <VideoCameraIcon className="w-6 h-6 text-purple-400" />
+                          <VideoCameraIcon className="w-6 h-6 text-cyan-400" />
                           <div>
                             <h3 className="font-semibold">{camera.location}</h3>
                             <p className="text-sm text-gray-400">{camera.resolution} • {camera.fps} FPS</p>

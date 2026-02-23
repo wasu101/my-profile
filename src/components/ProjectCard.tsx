@@ -1,9 +1,8 @@
-'use client';
+﻿'use client';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
+import { motion } from "framer-motion";
 import Image from "next/image";
 import { EyeIcon, CodeBracketIcon } from "@heroicons/react/24/outline";
 
@@ -17,15 +16,6 @@ interface ProjectCardProps {
 }
 
 const ProjectCard = ({ title, description, tech, demoLink, image, index }: ProjectCardProps) => {
-  const cardRef = useRef<HTMLDivElement>(null);
-  
-  const { scrollYProgress } = useScroll({
-    target: cardRef,
-    offset: ["start end", "end start"]
-  });
-  
-  const opacity = useTransform(scrollYProgress, [0, 0.5, 1], [0.5, 1, 0.5]);
-  const scale = useTransform(scrollYProgress, [0, 0.5, 1], [0.8, 1, 0.8]);
 
   // Tech logos mapping - ใช้ CDN เหมือน SkillsSection
   const getTechLogo = (techName: string) => {
@@ -85,13 +75,11 @@ const ProjectCard = ({ title, description, tech, demoLink, image, index }: Proje
   
   return (
     <motion.div
-      ref={cardRef}
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ delay: index * 0.1, duration: 0.5 }}
-      whileHover={{ y: -10 }}
-      style={{ opacity, scale }}
+      whileHover={{ y: -6 }}
       className="h-full"
     >
       <Card className="h-full backdrop-blur-lg bg-white/5 border-white/10 hover:bg-white/10 transition-all duration-300 overflow-hidden group">
@@ -105,7 +93,7 @@ const ProjectCard = ({ title, description, tech, demoLink, image, index }: Proje
               className="object-cover transition-transform duration-300 group-hover:scale-110"
             />
           ) : (
-            <div className="h-full bg-gradient-to-br from-purple-500/20 to-pink-500/20 flex items-center justify-center">
+            <div className="h-full bg-gradient-to-br from-cyan-500/20 to-teal-500/20 flex items-center justify-center">
               <CodeBracketIcon className="w-16 h-16 text-white/50" />
             </div>
           )}
@@ -151,7 +139,7 @@ const ProjectCard = ({ title, description, tech, demoLink, image, index }: Proje
         </CardHeader>
 
         <CardContent className="pb-4">
-          {/* Tech stack with logos */}
+          {/* Tech stack with logos 
           <div className="space-y-3">
             <h4 className="text-sm font-semibold text-gray-300">Tech Stack:</h4>
             <div className="flex flex-wrap gap-2">
@@ -183,13 +171,14 @@ const ProjectCard = ({ title, description, tech, demoLink, image, index }: Proje
               ))}
             </div>
           </div>
+          */}
         </CardContent>
 
         <CardFooter className="pt-0">
           <Button 
             variant="outline" 
             size="sm"
-            className="w-full border-purple-500/50 text-purple-400 hover:bg-purple-500/10 hover:text-purple-300 transition-all" 
+            className="w-full border-cyan-500/50 text-cyan-400 hover:bg-cyan-500/10 hover:text-cyan-300 transition-all" 
             asChild
           >
             <a href={demoLink} className="flex items-center justify-center gap-2" target="_blank" rel="noopener noreferrer">

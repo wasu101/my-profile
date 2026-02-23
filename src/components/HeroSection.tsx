@@ -1,4 +1,5 @@
-'use client';
+﻿'use client';
+import { useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
@@ -7,11 +8,237 @@ import TypeWriter from "@/components/TypeWriter";
 import ScrollMouseIndicator from "./ScrollMouseIndicator";
 import { useLanguage } from "@/contexts/LanguageContext";
 
+// ─── Speed Grid Canvas ───────────────────────────────────────────────────────
+function SpeedGrid() {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    let animId: number;
+    let t = 0;
+
+    const resize = () => {
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+    };
+    resize();
+    window.addEventListener('resize', resize);
+
+    const COLS   = 16;
+    const ROWS   = 10;
+    const SPEED  = 0.0005;
+    const VP_Y   = 0.42;
+
+    // ── Grid helpers ─────────────────────────────────────────────────────────
+    /** Convert grid-local (col, rowOffset) to screen (x, y, depth) */
+    function gridPos(col: number, rowOffset: number, W: number, H: number) {
+      const hy = H * VP_Y;
+      const raw = (rowOffset + t) % 1;
+      const depth = raw * raw * raw;
+      const xRatio = col / COLS;
+      const xTop = W * xRatio;
+      const xBot = W * (0.5 + (xRatio - 0.5) * 3.8);
+      return {
+        x: xTop + (xBot - xTop) * depth,
+        y: hy + (H - hy) * depth,
+        depth,
+      };
+    }
+
+    // ── Multi-particle system (10 particles, each on grid) ───────────────────
+    interface WayPoint { col: number; row: number; }
+    interface Particle {
+      path:        WayPoint[];
+      segIdx:      number;
+      segProgress: number;
+      speed:       number;   // individual speed variation
+      trail:       Array<{col: number; rowFrac: number}>;
+    }
+    const PARTICLE_COUNT = 10;
+    const TRAIL_LEN      = 60;
+    const P_SPEED_BASE   = 0.007; // base speed (slow)
+
+    function makePath(fromCol: number, fromRow: number): WayPoint[] {
+      const pts: WayPoint[] = [{ col: fromCol, row: fromRow }];
+      let col = fromCol;
+      let row = fromRow;
+      for (let i = 0; i < 14; i++) {
+        if (Math.random() < 0.6 || row >= ROWS - 1) {
+          const steps = Math.floor(Math.random() * 3) + 1;
+          const dir = col <= 0 ? 1 : col >= COLS ? -1 : (Math.random() < 0.5 ? 1 : -1);
+          col = Math.max(0, Math.min(COLS, col + steps * dir));
+        } else {
+          row = Math.min(ROWS - 1, row + 1);
+        }
+        pts.push({ col, row });
+        if (row >= ROWS - 1) break;
+      }
+      return pts;
+    }
+
+    function spawnParticle(staggerTrail = false): Particle {
+      const startCol = Math.floor(Math.random() * (COLS + 1));
+      const startRow = Math.floor(Math.random() * ROWS);
+      const p: Particle = {
+        path:        makePath(startCol, startRow),
+        segIdx:      0,
+        segProgress: staggerTrail ? Math.random() : 0,
+        speed:       P_SPEED_BASE * (0.7 + Math.random() * 0.6),
+        trail:       [],
+      };
+      return p;
+    }
+
+    // init all particles staggered so they don't all start at once
+    const particles: Particle[] = [];
+    for (let i = 0; i < PARTICLE_COUNT; i++) particles.push(spawnParticle(true));
+
+    const draw = () => {
+      const W = canvas.width;
+      const H = canvas.height;
+      const hy = H * VP_Y;
+      ctx.clearRect(0, 0, W, H);
+
+      // ── Static grid lines ──────────────────────────────────────────────
+      for (let r = 0; r < ROWS; r++) {
+        const raw = ((r / ROWS) + t) % 1;
+        const p = raw * raw * raw;
+        const y = hy + (H - hy) * p;
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(W, y);
+        ctx.strokeStyle = `rgba(6,182,212,${(p * 0.5).toFixed(2)})`;
+        ctx.lineWidth = 0.5 + p * 1.2;
+        ctx.stroke();
+      }
+      for (let c = 0; c <= COLS; c++) {
+        const xR = c / COLS;
+        const xTop = W * xR;
+        const xBot = W * (0.5 + (xR - 0.5) * 3.8);
+        const dist = Math.abs(xR - 0.5) * 2;
+        ctx.beginPath();
+        ctx.moveTo(xTop, hy);
+        ctx.lineTo(xBot, H);
+        ctx.strokeStyle = `rgba(6,182,212,${(0.1 + dist * 0.14).toFixed(2)})`;
+        ctx.lineWidth = 0.7;
+        ctx.stroke();
+      }
+      // horizon glow
+      const hg = ctx.createLinearGradient(0, hy, W, hy);
+      hg.addColorStop(0,   'rgba(6,182,212,0)');
+      hg.addColorStop(0.3, 'rgba(6,182,212,0.22)');
+      hg.addColorStop(0.5, 'rgba(45,212,191,0.4)');
+      hg.addColorStop(0.7, 'rgba(6,182,212,0.22)');
+      hg.addColorStop(1,   'rgba(6,182,212,0)');
+      ctx.beginPath(); ctx.moveTo(0, hy); ctx.lineTo(W, hy);
+      ctx.strokeStyle = hg; ctx.lineWidth = 1.5; ctx.stroke();
+
+      // ── Advance & draw each particle ───────────────────────────────────
+      for (const p of particles) {
+        // advance
+        p.segProgress += p.speed;
+        if (p.segProgress >= 1) {
+          p.segProgress -= 1;
+          p.segIdx++;
+          if (p.segIdx >= p.path.length - 1) {
+            const last = p.path[p.path.length - 1];
+            p.path = makePath(last.col, 0);
+            p.segIdx = 0;
+            p.trail.length = 0;
+          }
+        }
+
+        if (p.path.length < 2) continue;
+        const wp0 = p.path[p.segIdx];
+        const wp1 = p.path[p.segIdx + 1];
+        const col     = wp0.col + (wp1.col - wp0.col) * p.segProgress;
+        const rowFrac = wp0.row + (wp1.row - wp0.row) * p.segProgress;
+        const rowOffset = rowFrac / ROWS;
+
+        const pos = gridPos(col, rowOffset, W, H);
+
+        if (pos.depth > 0.93) {
+          const last = p.path[p.path.length - 1];
+          p.path = makePath(last.col, 0);
+          p.segIdx = 0; p.segProgress = 0; p.trail.length = 0;
+          continue;
+        }
+
+        p.trail.push({ col, rowFrac: rowOffset });
+        if (p.trail.length > TRAIL_LEN) p.trail.shift();
+
+        // draw trail
+        if (p.trail.length > 1) {
+          const pts = p.trail.map(tr => gridPos(tr.col, tr.rowFrac, W, H));
+          for (let i = 1; i < pts.length; i++) {
+            const a = pts[i - 1];
+            const b = pts[i];
+            const ratio = i / pts.length;
+            const alpha = ratio * ratio * b.depth * 0.95;
+            const width = 0.5 + ratio * ratio * b.depth * 3.5;
+            const grad = ctx.createLinearGradient(a.x, a.y, b.x, b.y);
+            grad.addColorStop(0, `rgba(6,182,212,${(alpha * 0.35).toFixed(2)})`);
+            grad.addColorStop(1, `rgba(255,255,255,${alpha.toFixed(2)})`);
+            ctx.save();
+            ctx.beginPath();
+            ctx.moveTo(a.x, a.y);
+            ctx.lineTo(b.x, b.y);
+            ctx.strokeStyle = grad;
+            ctx.lineWidth = width;
+            ctx.shadowColor = 'rgba(6,182,212,1)';
+            ctx.shadowBlur  = 3 + ratio * 10;
+            ctx.stroke();
+            ctx.restore();
+          }
+          // head dot — fades with distance (depth near 0 = far away = very faint)
+          const head = pts[pts.length - 1];
+          const headAlpha = head.depth * head.depth * 0.7;
+          if (headAlpha > 0.02) {
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(head.x, head.y, 0.5 + head.depth * 1.5, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(180,230,255,${headAlpha.toFixed(2)})`;
+            ctx.shadowColor = 'rgba(6,182,212,0.6)';
+            ctx.shadowBlur  = 4 + head.depth * 6;
+            ctx.fill();
+            ctx.restore();
+          }
+        }
+      }
+
+      t = (t + SPEED) % 1;
+      animId = requestAnimationFrame(draw);
+    };
+
+    animId = requestAnimationFrame(draw);
+    return () => {
+      cancelAnimationFrame(animId);
+      window.removeEventListener('resize', resize);
+    };
+  }, []);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      className="absolute inset-0 w-full h-full pointer-events-none"
+      style={{ opacity: 0.9 }}
+    />
+  );
+}
+
 const HeroSection = () => {
   const { t } = useLanguage();
 
   return (
-    <section className="px-4 sm:px-6 lg:px-8 py-16 sm:py-20 md:py-32 relative min-h-screen flex items-center">
+    <section className="px-4 sm:px-6 lg:px-8 py-16 sm:py-20 md:py-32 relative min-h-screen flex items-center overflow-hidden">
+      {/* Animated speed grid background */}
+      <SpeedGrid />
+      {/* Vignette overlay so edges fade dark */}
+      <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse 80% 60% at 50% 50%, transparent 30%, rgba(9,9,11,0.7) 100%)' }} />
       <div className="max-w-7xl mx-auto w-full">
         <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-12">
           {/* Text Content */}
@@ -26,7 +253,7 @@ const HeroSection = () => {
                 {t("สวัสดี ผมชื่อ", "Hi, I'm")}
               </span>
               <br className="block sm:hidden" />
-              <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-cyan-400 to-teal-400 bg-clip-text text-transparent">
                 {t(" วรกันต์ นาไทร (แจ๊ค)", " Worrakan Nasai (Jack)")}
               </span>
             </h2>
@@ -47,7 +274,7 @@ const HeroSection = () => {
               transition={{ delay: 1, duration: 0.8 }}
             >
               <Button 
-                className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white border-0 transform hover:scale-105 transition-all duration-200 px-6 py-3 text-base font-semibold" 
+                className="bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-600 hover:to-teal-600 text-white border-0 transform hover:scale-105 transition-all duration-200 px-6 py-3 text-base font-semibold" 
                 asChild
               >
                 <Link href="#contact">{t('ติดต่อฉัน', 'Get In Touch')}</Link>
@@ -69,7 +296,7 @@ const HeroSection = () => {
               transition={{ delay: 1.5, duration: 0.8 }}
             >
               <div className="text-center">
-                <div className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">5+</div>
+                <div className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-cyan-400 to-teal-400 bg-clip-text text-transparent">5+</div>
                 <div className="text-xs sm:text-sm text-gray-400">{t('ปีประสบการณ์', 'Years Experience')}</div>
               </div>
               <div className="text-center">
@@ -106,21 +333,13 @@ const HeroSection = () => {
             transition={{ delay: 0.5, duration: 0.8 }}
           >
             {/* Background with gradient and blur effect */}
-            <div className="absolute inset-0 bg-gradient-to-br from-purple-500/20 to-pink-500/20 backdrop-blur-xl rounded-full border border-white/10" />
+            <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/20 to-teal-500/20 backdrop-blur-xl rounded-full border border-white/10" />
             
-            {/* Animated glow ring */}
-            <motion.div
-              className="absolute inset-0 rounded-full border-2 border-gradient-to-r from-purple-400 to-pink-400"
-              animate={{ 
-                rotate: 360,
-                scale: [1, 1.05, 1]
-              }}
-              transition={{ 
-                rotate: { duration: 20, repeat: Infinity, ease: "linear" },
-                scale: { duration: 2, repeat: Infinity, ease: "easeInOut" }
-              }}
+            {/* Static glow ring */}
+            <div
+              className="absolute inset-0 rounded-full"
               style={{
-                background: 'conic-gradient(from 0deg, transparent, rgba(168, 85, 247, 0.4), transparent)',
+                background: 'conic-gradient(from 120deg, transparent, rgba(6, 182, 212, 0.35), transparent)',
                 borderRadius: '50%'
               }}
             />
@@ -163,45 +382,6 @@ const HeroSection = () => {
               ))}
             </motion.div>
             
-            {/* Floating particles around image - responsive sizes */}
-            <motion.div
-              className="absolute top-6 sm:top-8 right-6 sm:right-8 w-1.5 h-1.5 sm:w-2 sm:h-2 bg-purple-400 rounded-full"
-              animate={{
-                y: [0, -8, 0],
-                opacity: [0.5, 1, 0.5]
-              }}
-              transition={{
-                duration: 3,
-                repeat: Infinity,
-                ease: "easeInOut"
-              }}
-            />
-            <motion.div
-              className="absolute bottom-8 sm:bottom-12 left-4 sm:left-6 w-1 h-1 sm:w-1.5 sm:h-1.5 bg-pink-400 rounded-full"
-              animate={{
-                y: [0, -6, 0],
-                opacity: [0.3, 0.8, 0.3]
-              }}
-              transition={{
-                duration: 2.5,
-                repeat: Infinity,
-                ease: "easeInOut",
-                delay: 1
-              }}
-            />
-            <motion.div
-              className="absolute top-12 sm:top-16 left-3 sm:left-4 w-0.5 h-0.5 sm:w-1 sm:h-1 bg-blue-400 rounded-full"
-              animate={{
-                y: [0, -4, 0],
-                opacity: [0.4, 0.9, 0.4]
-              }}
-              transition={{
-                duration: 2,
-                repeat: Infinity,
-                ease: "easeInOut",
-                delay: 0.5
-              }}
-            />
           </motion.div>
         </div>
       </div>

@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -264,7 +264,7 @@ export default function EcommerceDemo() {
       case 'popular':
         return 'bg-blue-100 text-blue-800 border-blue-300';
       case 'featured':
-        return 'bg-purple-100 text-purple-800 border-purple-300';
+        return 'bg-cyan-100 text-cyan-800 border-cyan-300';
       default:
         return 'bg-gray-100 text-gray-800 border-gray-300';
     }
@@ -283,7 +283,7 @@ export default function EcommerceDemo() {
 
   if (orderComplete) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-green-50 via-blue-50 to-purple-50 flex items-center justify-center p-6">
+      <div className="min-h-screen bg-gradient-to-br from-green-50 via-blue-50 to-cyan-50 flex items-center justify-center p-6">
         <motion.div
           initial={{ scale: 0, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
@@ -345,8 +345,8 @@ export default function EcommerceDemo() {
       category: "UI Components",
       items: [
         { name: "shadcn/ui", description: "Modern UI Components", color: "bg-slate-900 text-white" },
-        { name: "Radix UI", description: "Accessible Primitives", color: "bg-purple-600 text-white" },
-        { name: "Framer Motion", description: "Animations & Transitions", color: "bg-pink-500 text-white" },
+        { name: "Radix UI", description: "Accessible Primitives", color: "bg-cyan-600 text-white" },
+        { name: "Framer Motion", description: "Animations & Transitions", color: "bg-teal-500 text-white" },
         { name: "Heroicons", description: "Beautiful SVG Icons", color: "bg-indigo-600 text-white" }
       ]
     },
@@ -377,10 +377,10 @@ export default function EcommerceDemo() {
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl flex items-center justify-center shadow-md">
+              <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-xl flex items-center justify-center shadow-md">
                 <span className="text-white font-bold text-lg">T</span>
               </div>
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
                 TechStore
               </h1>
             </div>
@@ -466,7 +466,7 @@ export default function EcommerceDemo() {
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.5 }}
-                      className="bg-gradient-to-r from-blue-50 to-purple-50 border-2 border-blue-200 rounded-lg p-6"
+                      className="bg-gradient-to-r from-blue-50 to-cyan-50 border-2 border-blue-200 rounded-lg p-6"
                     >
                       <div className="flex items-start gap-3">
                         <InformationCircleIcon className="w-6 h-6 text-blue-600 flex-shrink-0 mt-1" />
@@ -484,7 +484,7 @@ export default function EcommerceDemo() {
                             <Badge variant="outline" className="text-green-700 border-green-300 font-medium">
                               ♿ Accessible
                             </Badge>
-                            <Badge variant="outline" className="text-purple-700 border-purple-300 font-medium">
+                            <Badge variant="outline" className="text-cyan-700 border-cyan-300 font-medium">
                               📱 Responsive
                             </Badge>
                             <Badge variant="outline" className="text-orange-700 border-orange-300 font-medium">
@@ -583,7 +583,7 @@ export default function EcommerceDemo() {
                         <span className="font-bold text-gray-900">รวมทั้งหมด:</span>
                         <span className="text-2xl font-bold text-blue-600">฿{cartTotal.toLocaleString()}</span>
                       </div>
-                      <Button onClick={handleCheckout} className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold">
+                      <Button onClick={handleCheckout} className="w-full bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-bold">
                         <CreditCardIcon className="w-4 h-4 mr-2" />
                         ชำระเงิน
                       </Button>
@@ -602,7 +602,7 @@ export default function EcommerceDemo() {
       </header>
 
       {/* Tech Stack Info Banner */}
-      <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-2">
+      <div className="bg-gradient-to-r from-blue-600 to-cyan-600 text-white py-2">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex items-center justify-center gap-4 text-sm">
             <span className="flex items-center gap-1">
@@ -969,7 +969,7 @@ export default function EcommerceDemo() {
               </div>
             </div>
 
-            <Button onClick={completeOrder} className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold text-lg py-6">
+            <Button onClick={completeOrder} className="w-full bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-bold text-lg py-6">
               <CheckCircleIcon className="w-5 h-5 mr-2" />
               ยืนยันการสั่งซื้อ
             </Button>

@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import { useState } from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -142,7 +142,7 @@ export default function TicketSystemDemo() {
   return (
     <div className="min-h-screen bg-black text-white">
       {/* Header */}
-      <header className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-4">
+      <header className="bg-gradient-to-r from-blue-600 to-cyan-600 text-white p-4">
         <div className="max-w-6xl mx-auto flex justify-between items-center">
           <div className="flex items-center gap-3">
             <TicketIcon className="w-8 h-8" />
@@ -329,7 +329,7 @@ export default function TicketSystemDemo() {
 
           <Card className="bg-white/5 border-white/10">
             <CardContent className="p-6 text-center">
-              <DocumentTextIcon className="w-12 h-12 text-purple-400 mx-auto mb-4" />
+              <DocumentTextIcon className="w-12 h-12 text-cyan-400 mx-auto mb-4" />
               <h3 className="font-semibold mb-2">Detailed Reports</h3>
               <p className="text-gray-400">Generate comprehensive ticket analytics</p>
             </CardContent>

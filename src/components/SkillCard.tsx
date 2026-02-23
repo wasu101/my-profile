@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -68,7 +68,7 @@ const SkillCard = ({ name, imagePath, index, invertColor = false, description }:
               {particlePositions.length > 0 && particlePositions.map((position, i) => (
                 <motion.div
                   key={i}
-                  className="absolute w-1 h-1 bg-purple-400 rounded-full"
+                  className="absolute w-1 h-1 bg-cyan-400 rounded-full"
                   initial={{
                     x: position,
                     y: 100,
@@ -96,7 +96,7 @@ const SkillCard = ({ name, imagePath, index, invertColor = false, description }:
             >
               {/* Glow backdrop */}
               <motion.div 
-                className="absolute -inset-0.5 bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl opacity-0 group-hover:opacity-75 blur-lg transition-opacity duration-500"
+                className="absolute -inset-0.5 bg-gradient-to-r from-cyan-600 to-teal-600 rounded-2xl opacity-0 group-hover:opacity-75 blur-lg transition-opacity duration-500"
                 animate={isHovered ? {
                   scale: [1, 1.1, 1],
                   opacity: [0.5, 0.8, 0.5]
@@ -107,11 +107,11 @@ const SkillCard = ({ name, imagePath, index, invertColor = false, description }:
               <Card className="relative bg-black/50 backdrop-blur-xl border border-white/10 hover:border-white/20 transition-all duration-300 overflow-hidden rounded-2xl">
                 {/* Animated background mesh */}
                 <div className="absolute inset-0">
-                  <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-transparent to-pink-500/10" />
+                  <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 via-transparent to-teal-500/10" />
                   <motion.div
                     className="absolute inset-0"
                     style={{
-                      background: `radial-gradient(circle at ${isHovered ? '50% 50%' : '0% 0%'}, rgba(168, 85, 247, 0.15) 0%, transparent 60%)`,
+                      background: `radial-gradient(circle at ${isHovered ? '50% 50%' : '0% 0%'}, rgba(6, 182, 212, 0.15) 0%, transparent 60%)`,
                     }}
                     transition={{ duration: 0.6 }}
                   />
@@ -133,7 +133,7 @@ const SkillCard = ({ name, imagePath, index, invertColor = false, description }:
                     <motion.div
                       className="absolute inset-0 rounded-full"
                       style={{
-                        background: 'conic-gradient(from 0deg, transparent, rgba(168, 85, 247, 0.3), transparent)',
+                        background: 'conic-gradient(from 0deg, transparent, rgba(6, 182, 212, 0.3), transparent)',
                       }}
                       animate={{
                         rotate: isHovered ? 360 : 0
@@ -161,9 +161,9 @@ const SkillCard = ({ name, imagePath, index, invertColor = false, description }:
                         className="object-contain w-full h-full"
                         style={{
                           filter: invertColor 
-                            ? `brightness(0) invert(1) ${isHovered ? 'drop-shadow(0 0 8px rgba(168, 85, 247, 0.5))' : ''}`
+                            ? `brightness(0) invert(1) ${isHovered ? 'drop-shadow(0 0 8px rgba(6, 182, 212, 0.5))' : ''}`
                             : isHovered 
-                              ? 'brightness(1.2) drop-shadow(0 0 8px rgba(168, 85, 247, 0.5))' 
+                              ? 'brightness(1.2) drop-shadow(0 0 8px rgba(6, 182, 212, 0.5))' 
                               : 'brightness(0.9)'
                         }}
                       />
@@ -180,7 +180,7 @@ const SkillCard = ({ name, imagePath, index, invertColor = false, description }:
                         }}
                         transition={{ duration: 1, repeat: Infinity }}
                         style={{
-                          border: '2px solid rgba(168, 85, 247, 0.5)'
+                          border: '2px solid rgba(6, 182, 212, 0.5)'
                         }}
                       />
                     )}
@@ -200,7 +200,7 @@ const SkillCard = ({ name, imagePath, index, invertColor = false, description }:
                       <motion.div
                         key={i}
                         className={`w-1.5 h-1.5 rounded-full ${
-                          i < 4 ? 'bg-gradient-to-r from-purple-500 to-pink-500' : 'bg-white/20'
+                          i < 4 ? 'bg-gradient-to-r from-cyan-500 to-teal-500' : 'bg-white/20'
                         }`}
                         initial={{ scale: 0 }}
                         animate={{ scale: 1 }}
@@ -214,7 +214,7 @@ const SkillCard = ({ name, imagePath, index, invertColor = false, description }:
                 <motion.div
                   className="absolute bottom-0 left-0 right-0 h-[1px]"
                   style={{
-                    background: 'linear-gradient(90deg, transparent, rgba(168, 85, 247, 0.8), transparent)',
+                    background: 'linear-gradient(90deg, transparent, rgba(6, 182, 212, 0.8), transparent)',
                     scaleX: isHovered ? 1 : 0,
                     transition: 'transform 0.3s ease-out'
                   }}
@@ -226,7 +226,7 @@ const SkillCard = ({ name, imagePath, index, invertColor = false, description }:
         
         <TooltipContent 
           side="top" 
-          className="max-w-xs bg-black/90 border-purple-500/50 text-gray-200"
+          className="max-w-xs bg-black/90 border-cyan-500/50 text-gray-200"
         >
           <p className="text-sm">
             {displayText}
@@ -234,7 +234,7 @@ const SkillCard = ({ name, imagePath, index, invertColor = false, description }:
               <motion.span
                 animate={{ opacity: [1, 0] }}
                 transition={{ duration: 0.5, repeat: Infinity }}
-                className="inline-block w-0.5 h-3 bg-purple-400 ml-0.5 align-middle"
+                className="inline-block w-0.5 h-3 bg-cyan-400 ml-0.5 align-middle"
               />
             )}
           </p>

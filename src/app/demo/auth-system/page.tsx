@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -53,7 +53,7 @@ export default function AuthSystemDemo() {
     {
       category: "Authentication Technologies",
       items: [
-        { name: "JSON Web Tokens (JWT)", description: "Secure token-based authentication", color: "bg-purple-600 text-white" },
+        { name: "JSON Web Tokens (JWT)", description: "Secure token-based authentication", color: "bg-cyan-600 text-white" },
         { name: "OAuth 2.0", description: "Third-party authentication protocol", color: "bg-blue-600 text-white" },
         { name: "bcrypt", description: "Password hashing algorithm", color: "bg-red-600 text-white" },
         { name: "2FA/MFA", description: "Multi-factor authentication", color: "bg-green-600 text-white" }
@@ -63,7 +63,7 @@ export default function AuthSystemDemo() {
       category: "Frontend Technologies",
       items: [
         { name: "Next.js 14", description: "React framework with App Router", color: "bg-black text-white" },
-        { name: "React Hook Form", description: "Form validation library", color: "bg-pink-600 text-white" },
+        { name: "React Hook Form", description: "Form validation library", color: "bg-teal-600 text-white" },
         { name: "Framer Motion", description: "Animation library", color: "bg-violet-600 text-white" },
         { name: "TypeScript", description: "Type-safe JavaScript", color: "bg-blue-500 text-white" }
       ]
@@ -255,7 +255,7 @@ export default function AuthSystemDemo() {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.5 }}
-                        className="bg-gradient-to-r from-blue-900/30 to-purple-900/30 border border-blue-700/50 rounded-lg p-6"
+                        className="bg-gradient-to-r from-blue-900/30 to-cyan-900/30 border border-blue-700/50 rounded-lg p-6"
                       >
                         <div className="flex items-start gap-3">
                           <InformationCircleIcon className="w-6 h-6 text-blue-400 flex-shrink-0 mt-1" />
@@ -273,7 +273,7 @@ export default function AuthSystemDemo() {
                               <Badge variant="outline" className="text-green-400 border-green-400">
                                 ✅ Validated
                               </Badge>
-                              <Badge variant="outline" className="text-purple-400 border-purple-400">
+                              <Badge variant="outline" className="text-cyan-400 border-cyan-400">
                                 📱 Responsive
                               </Badge>
                               <Badge variant="outline" className="text-orange-400 border-orange-400">
@@ -335,13 +335,13 @@ export default function AuthSystemDemo() {
               <Card className="bg-gray-800/50 border-gray-700 hover:bg-gray-800/70 transition-all">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <UserIcon className="w-5 h-5 text-purple-400" />
+                    <UserIcon className="w-5 h-5 text-cyan-400" />
                     User Profile
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
+                    <div className="w-12 h-12 bg-gradient-to-r from-cyan-500 to-teal-500 rounded-full flex items-center justify-center">
                       <span className="text-white font-bold text-lg">D</span>
                     </div>
                     <div>
@@ -369,7 +369,7 @@ export default function AuthSystemDemo() {
                     </div>
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
-                        <FingerPrintIcon className="w-4 h-4 text-purple-400" />
+                        <FingerPrintIcon className="w-4 h-4 text-cyan-400" />
                         <span className="text-sm">2FA Status</span>
                       </div>
                       <Badge className="bg-green-500/20 text-green-400 border-green-500/50">
@@ -517,10 +517,10 @@ export default function AuthSystemDemo() {
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-8"
         >
-          <div className="w-20 h-20 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-6">
+          <div className="w-20 h-20 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-full flex items-center justify-center mx-auto mb-6">
             <LockClosedIcon className="w-10 h-10 text-white" />
           </div>
-          <h1 className="text-3xl font-bold mb-2 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+          <h1 className="text-3xl font-bold mb-2 bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
             Authentication System
           </h1>
           <p className="text-gray-400">Secure login with JWT & OAuth integration</p>
@@ -528,7 +528,7 @@ export default function AuthSystemDemo() {
             <Badge className="bg-blue-500/20 text-blue-400 border-blue-500/50">
               JWT Tokens
             </Badge>
-            <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/50">
+            <Badge className="bg-cyan-500/20 text-cyan-400 border-cyan-500/50">
               OAuth 2.0
             </Badge>
           </div>
@@ -645,7 +645,7 @@ export default function AuthSystemDemo() {
 
                   <Button 
                     type="submit" 
-                    className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+                    className="w-full bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700"
                     disabled={isLoading}
                   >
                     {isLoading ? (
@@ -800,7 +800,7 @@ export default function AuthSystemDemo() {
 
                   <Button 
                     type="submit" 
-                    className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
+                    className="w-full bg-gradient-to-r from-cyan-600 to-teal-600 hover:from-cyan-700 hover:to-teal-700"
                     disabled={isLoading}
                   >
                     {isLoading ? (

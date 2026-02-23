@@ -1,6 +1,6 @@
-'use client';
+﻿'use client';
 import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useState, useEffect } from "react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
@@ -50,14 +50,14 @@ const Header = () => {
           >
             <Link href="/" className="group">
               <h1 className="text-xl md:text-2xl font-bold relative">
-                <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-purple-400 bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-cyan-400 via-teal-400 to-cyan-400 bg-clip-text text-transparent">
                   {t('W', 'W')}
                 </span>
                 <span className="text-white/60 font-light ml-2">
                   {t('Portfolio', 'Portfolio')}
                 </span>
                 <motion.div
-                  className="absolute -bottom-1 left-0 h-0.5 bg-gradient-to-r from-purple-400 to-pink-400"
+                  className="absolute -bottom-1 left-0 h-0.5 bg-gradient-to-r from-cyan-400 to-teal-400"
                   initial={{ width: 0 }}
                   whileHover={{ width: '100%' }}
                   transition={{ duration: 0.3 }}
@@ -87,11 +87,11 @@ const Header = () => {
                   >
                     <span className="relative z-10">{item.label}</span>
                     <motion.div
-                      className="absolute inset-0 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"
+                      className="absolute inset-0 bg-gradient-to-r from-cyan-500/20 to-teal-500/20 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"
                       whileHover={{ scale: 1.05 }}
                     />
                     <motion.div
-                      className="absolute bottom-0 left-1/2 transform -translate-x-1/2 h-0.5 bg-gradient-to-r from-purple-400 to-pink-400"
+                      className="absolute bottom-0 left-1/2 transform -translate-x-1/2 h-0.5 bg-gradient-to-r from-cyan-400 to-teal-400"
                       initial={{ width: 0 }}
                       whileHover={{ width: '80%' }}
                       transition={{ duration: 0.3 }}
@@ -113,7 +113,7 @@ const Header = () => {
                   onClick={() => language === 'en' && toggleLanguage()}
                   className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-300 ${
                     language === 'th'
-                      ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg'
+                      ? 'bg-gradient-to-r from-cyan-500 to-teal-500 text-white shadow-lg'
                       : 'text-gray-400 hover:text-white'
                   }`}
                 >
@@ -123,7 +123,7 @@ const Header = () => {
                   onClick={() => language === 'th' && toggleLanguage()}
                   className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-300 ${
                     language === 'en'
-                      ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg'
+                      ? 'bg-gradient-to-r from-cyan-500 to-teal-500 text-white shadow-lg'
                       : 'text-gray-400 hover:text-white'
                   }`}
                 >
@@ -189,7 +189,7 @@ const Header = () => {
                       }}
                       className={`px-6 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
                         language === 'th'
-                          ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg'
+                          ? 'bg-gradient-to-r from-cyan-500 to-teal-500 text-white shadow-lg'
                           : 'text-gray-400'
                       }`}
                     >
@@ -202,7 +202,7 @@ const Header = () => {
                       }}
                       className={`px-6 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
                         language === 'en'
-                          ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg'
+                          ? 'bg-gradient-to-r from-cyan-500 to-teal-500 text-white shadow-lg'
                           : 'text-gray-400'
                       }`}
                     >

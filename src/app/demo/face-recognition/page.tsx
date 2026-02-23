@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -58,14 +58,14 @@ export default function FaceRecognitionDemo() {
       items: [
         { name: "OpenCV", description: "Computer vision and image processing", color: "bg-blue-600 text-white" },
         { name: "dlib", description: "Face detection and landmarks", color: "bg-green-600 text-white" },
-        { name: "face_recognition", description: "Face encoding and matching", color: "bg-purple-600 text-white" },
+        { name: "face_recognition", description: "Face encoding and matching", color: "bg-cyan-600 text-white" },
         { name: "ResNet Model", description: "Deep learning face recognition", color: "bg-red-600 text-white" }
       ]
     },
     {
       category: "Hardware Integration",
       items: [
-        { name: "Raspberry Pi", description: "Embedded system controller", color: "bg-pink-600 text-white" },
+        { name: "Raspberry Pi", description: "Embedded system controller", color: "bg-teal-600 text-white" },
         { name: "RPi.GPIO", description: "Hardware control interface", color: "bg-orange-600 text-white" },
         { name: "USB Camera", description: "Real-time video capture", color: "bg-teal-600 text-white" },
         { name: "Relay Control", description: "Door lock automation", color: "bg-indigo-600 text-white" }
@@ -85,7 +85,7 @@ export default function FaceRecognitionDemo() {
       items: [
         { name: "Google Sheets API", description: "Cloud data logging", color: "bg-blue-500 text-white" },
         { name: "OAuth2", description: "Secure authentication", color: "bg-green-500 text-white" },
-        { name: "QR Code Generation", description: "Registration workflow", color: "bg-purple-500 text-white" },
+        { name: "QR Code Generation", description: "Registration workflow", color: "bg-cyan-500 text-white" },
         { name: "Access Control", description: "Multi-level security", color: "bg-red-500 text-white" }
       ]
     }
@@ -95,7 +95,7 @@ export default function FaceRecognitionDemo() {
     { label: 'Registered Users', value: '156', icon: UserIcon, color: 'text-blue-500' },
     { label: 'Today\'s Scans', value: '47', icon: CameraIcon, color: 'text-green-500' },
     { label: 'Success Rate', value: '94.2%', icon: CheckCircleIcon, color: 'text-emerald-500' },
-    { label: 'System Uptime', value: '99.8%', icon: ShieldCheckIcon, color: 'text-purple-500' },
+    { label: 'System Uptime', value: '99.8%', icon: ShieldCheckIcon, color: 'text-cyan-500' },
   ];
 
   const handleScan = () => {
@@ -263,7 +263,7 @@ export default function FaceRecognitionDemo() {
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
+              <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-lg flex items-center justify-center">
                 <CameraIcon className="w-6 h-6 text-white" />
               </div>
               <div>
@@ -335,7 +335,7 @@ export default function FaceRecognitionDemo() {
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.5 }}
-                      className="bg-gradient-to-r from-blue-900/30 to-purple-900/30 border border-blue-700/50 rounded-lg p-6"
+                      className="bg-gradient-to-r from-blue-900/30 to-cyan-900/30 border border-blue-700/50 rounded-lg p-6"
                     >
                       <div className="flex items-start gap-3">
                         <InformationCircleIcon className="w-6 h-6 text-blue-400 flex-shrink-0 mt-1" />
@@ -353,7 +353,7 @@ export default function FaceRecognitionDemo() {
                             <Badge variant="outline" className="text-green-400 border-green-400">
                               🔒 Secure Access
                             </Badge>
-                            <Badge variant="outline" className="text-purple-400 border-purple-400">
+                            <Badge variant="outline" className="text-cyan-400 border-cyan-400">
                               🤖 AI-Powered
                             </Badge>
                             <Badge variant="outline" className="text-orange-400 border-orange-400">
@@ -456,7 +456,7 @@ export default function FaceRecognitionDemo() {
                       <Button 
                         onClick={handleScan}
                         disabled={isScanning}
-                        className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+                        className="flex-1 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700"
                       >
                         {isScanning ? (
                           <>
@@ -564,7 +564,7 @@ export default function FaceRecognitionDemo() {
                 <Card className="bg-gray-800/50 border-gray-700">
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
-                      <UserPlusIcon className="w-5 h-5 text-purple-400" />
+                      <UserPlusIcon className="w-5 h-5 text-cyan-400" />
                       User Registration
                     </CardTitle>
                   </CardHeader>
@@ -586,7 +586,7 @@ export default function FaceRecognitionDemo() {
                       <Button 
                         onClick={handleRegister}
                         disabled={isRegistering || !userId.trim()}
-                        className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
+                        className="w-full bg-gradient-to-r from-cyan-600 to-teal-600 hover:from-cyan-700 hover:to-teal-700"
                       >
                         {isRegistering ? (
                           <>
@@ -746,7 +746,7 @@ export default function FaceRecognitionDemo() {
                 <Card className="bg-gray-800/50 border-gray-700">
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
-                      <CogIcon className="w-5 h-5 text-purple-400" />
+                      <CogIcon className="w-5 h-5 text-cyan-400" />
                       System Controls
                     </CardTitle>
                   </CardHeader>
