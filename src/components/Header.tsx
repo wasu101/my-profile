@@ -53,8 +53,8 @@ const Header = () => {
                 <span className="bg-gradient-to-r from-cyan-400 via-teal-400 to-cyan-400 bg-clip-text text-transparent">
                   {t('W', 'W')}
                 </span>
-                <span className="text-white/60 font-light ml-2">
-                  {t('Portfolio', 'Portfolio')}
+                <span className="text-white/60 font-light">
+                  {t('orrakan', 'orrakan')}
                 </span>
                 <motion.div
                   className="absolute -bottom-1 left-0 h-0.5 bg-gradient-to-r from-cyan-400 to-teal-400"

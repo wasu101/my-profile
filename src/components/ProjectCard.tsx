@@ -74,11 +74,8 @@ const ProjectCard = ({ title, description, tech, demoLink, image, index }: Proje
   
   return (
     <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ delay: index * 0.1, duration: 0.5 }}
       whileHover={{ y: -6 }}
+      transition={{ duration: 0.2 }}
       className="h-full"
     >
       <Card className="h-full backdrop-blur-lg bg-white/5 border-white/10 hover:bg-white/10 transition-all duration-300 overflow-hidden group">

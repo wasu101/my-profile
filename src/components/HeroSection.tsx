@@ -20,6 +20,7 @@ function SpeedGrid() {
 
     let animId: number;
     let t = 0;
+    let lastTimestamp = 0;
 
     const resize = () => {
       canvas.width = canvas.offsetWidth;
@@ -28,17 +29,17 @@ function SpeedGrid() {
     resize();
     window.addEventListener('resize', resize);
 
-    const COLS   = 16;
-    const ROWS   = 10;
-    const SPEED  = 0.0005;
-    const VP_Y   = 0.42;
+    const COLS        = 16;
+    const ROWS        = 10;
+    const SPEED       = 0.03;   // units per second (delta-time based)
+    const VP_Y        = 0.42;
+    const P_SPEED     = 0.42;   // fixed speed for all particles (units/sec)
 
     // ── Grid helpers ─────────────────────────────────────────────────────────
-    /** Convert grid-local (col, rowOffset) to screen (x, y, depth) */
     function gridPos(col: number, rowOffset: number, W: number, H: number) {
       const hy = H * VP_Y;
       const raw = (rowOffset + t) % 1;
-      const depth = raw * raw * raw;
+      const depth = raw * raw; // quadratic — smoother than cubic
       const xRatio = col / COLS;
       const xTop = W * xRatio;
       const xBot = W * (0.5 + (xRatio - 0.5) * 3.8);
@@ -49,18 +50,16 @@ function SpeedGrid() {
       };
     }
 
-    // ── Multi-particle system (10 particles, each on grid) ───────────────────
+    // ── Particle system ───────────────────────────────────────────────────────
     interface WayPoint { col: number; row: number; }
     interface Particle {
       path:        WayPoint[];
       segIdx:      number;
       segProgress: number;
-      speed:       number;   // individual speed variation
       trail:       Array<{col: number; rowFrac: number}>;
     }
     const PARTICLE_COUNT = 10;
-    const TRAIL_LEN      = 60;
-    const P_SPEED_BASE   = 0.007; // base speed (slow)
+    const TRAIL_LEN      = 50;
 
     function makePath(fromCol: number, fromRow: number): WayPoint[] {
       const pts: WayPoint[] = [{ col: fromCol, row: fromRow }];
@@ -80,33 +79,34 @@ function SpeedGrid() {
       return pts;
     }
 
-    function spawnParticle(staggerTrail = false): Particle {
+    function spawnParticle(stagger = false): Particle {
       const startCol = Math.floor(Math.random() * (COLS + 1));
       const startRow = Math.floor(Math.random() * ROWS);
-      const p: Particle = {
+      return {
         path:        makePath(startCol, startRow),
         segIdx:      0,
-        segProgress: staggerTrail ? Math.random() : 0,
-        speed:       P_SPEED_BASE * (0.7 + Math.random() * 0.6),
+        segProgress: stagger ? Math.random() : 0,
         trail:       [],
       };
-      return p;
     }
 
-    // init all particles staggered so they don't all start at once
     const particles: Particle[] = [];
     for (let i = 0; i < PARTICLE_COUNT; i++) particles.push(spawnParticle(true));
 
-    const draw = () => {
+    const draw = (timestamp: number) => {
+      // delta time in seconds, capped at 50ms to avoid huge jumps after tab switch
+      const delta = lastTimestamp ? Math.min((timestamp - lastTimestamp) / 1000, 0.05) : 0;
+      lastTimestamp = timestamp;
+
       const W = canvas.width;
       const H = canvas.height;
       const hy = H * VP_Y;
       ctx.clearRect(0, 0, W, H);
 
-      // ── Static grid lines ──────────────────────────────────────────────
+      // ── Grid lines ────────────────────────────────────────────────────
       for (let r = 0; r < ROWS; r++) {
         const raw = ((r / ROWS) + t) % 1;
-        const p = raw * raw * raw;
+        const p = raw * raw;
         const y = hy + (H - hy) * p;
         ctx.beginPath();
         ctx.moveTo(0, y);
@@ -137,10 +137,10 @@ function SpeedGrid() {
       ctx.beginPath(); ctx.moveTo(0, hy); ctx.lineTo(W, hy);
       ctx.strokeStyle = hg; ctx.lineWidth = 1.5; ctx.stroke();
 
-      // ── Advance & draw each particle ───────────────────────────────────
+      // ── Particles ─────────────────────────────────────────────────────
+      const step = P_SPEED * delta;
       for (const p of particles) {
-        // advance
-        p.segProgress += p.speed;
+        p.segProgress += step;
         if (p.segProgress >= 1) {
           p.segProgress -= 1;
           p.segIdx++;
@@ -155,11 +155,10 @@ function SpeedGrid() {
         if (p.path.length < 2) continue;
         const wp0 = p.path[p.segIdx];
         const wp1 = p.path[p.segIdx + 1];
-        const col     = wp0.col + (wp1.col - wp0.col) * p.segProgress;
-        const rowFrac = wp0.row + (wp1.row - wp0.row) * p.segProgress;
+        const col       = wp0.col + (wp1.col - wp0.col) * p.segProgress;
+        const rowFrac   = wp0.row + (wp1.row - wp0.row) * p.segProgress;
         const rowOffset = rowFrac / ROWS;
-
-        const pos = gridPos(col, rowOffset, W, H);
+        const pos       = gridPos(col, rowOffset, W, H);
 
         if (pos.depth > 0.93) {
           const last = p.path[p.path.length - 1];
@@ -171,50 +170,43 @@ function SpeedGrid() {
         p.trail.push({ col, rowFrac: rowOffset });
         if (p.trail.length > TRAIL_LEN) p.trail.shift();
 
-        // draw trail
         if (p.trail.length > 1) {
           const pts = p.trail.map(tr => gridPos(tr.col, tr.rowFrac, W, H));
+          // draw trail as single path per segment (no shadowBlur per segment)
           for (let i = 1; i < pts.length; i++) {
             const a = pts[i - 1];
             const b = pts[i];
             const ratio = i / pts.length;
-            const alpha = ratio * ratio * b.depth * 0.95;
-            const width = 0.5 + ratio * ratio * b.depth * 3.5;
-            const grad = ctx.createLinearGradient(a.x, a.y, b.x, b.y);
-            grad.addColorStop(0, `rgba(6,182,212,${(alpha * 0.35).toFixed(2)})`);
-            grad.addColorStop(1, `rgba(255,255,255,${alpha.toFixed(2)})`);
-            ctx.save();
+            const alpha = ratio * ratio * b.depth * 0.9;
+            const width = 0.5 + ratio * b.depth * 3;
             ctx.beginPath();
             ctx.moveTo(a.x, a.y);
             ctx.lineTo(b.x, b.y);
-            ctx.strokeStyle = grad;
+            ctx.strokeStyle = `rgba(120,220,255,${alpha.toFixed(2)})`;
             ctx.lineWidth = width;
-            ctx.shadowColor = 'rgba(6,182,212,1)';
-            ctx.shadowBlur  = 3 + ratio * 10;
             ctx.stroke();
-            ctx.restore();
           }
-          // head dot — fades with distance (depth near 0 = far away = very faint)
+          // head dot — single shadow only here
           const head = pts[pts.length - 1];
           const headAlpha = head.depth * head.depth * 0.7;
           if (headAlpha > 0.02) {
             ctx.save();
+            ctx.shadowColor = 'rgba(6,182,212,0.8)';
+            ctx.shadowBlur  = 6;
             ctx.beginPath();
             ctx.arc(head.x, head.y, 0.5 + head.depth * 1.5, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(180,230,255,${headAlpha.toFixed(2)})`;
-            ctx.shadowColor = 'rgba(6,182,212,0.6)';
-            ctx.shadowBlur  = 4 + head.depth * 6;
+            ctx.fillStyle = `rgba(200,240,255,${headAlpha.toFixed(2)})`;
             ctx.fill();
             ctx.restore();
           }
         }
       }
 
-      t = (t + SPEED) % 1;
+      t = (t + SPEED * delta) % 1;
       animId = requestAnimationFrame(draw);
     };
 
-    animId = requestAnimationFrame(draw);
+    animId = requestAnimationFrame((ts) => { lastTimestamp = ts; draw(ts); });
     return () => {
       cancelAnimationFrame(animId);
       window.removeEventListener('resize', resize);
@@ -326,12 +318,14 @@ const HeroSection = () => {
           </motion.div>
           
           {/* Profile Image Section */}
-          <motion.div 
-            className="w-48 h-48 sm:w-56 sm:h-56 md:w-64 md:h-64 lg:w-80 lg:h-80 relative flex-shrink-0"
+          <motion.div
+            className="flex flex-col items-center gap-4 flex-shrink-0"
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.5, duration: 0.8 }}
           >
+            {/* Circle */}
+            <div className="w-48 h-48 sm:w-56 sm:h-56 md:w-64 md:h-64 lg:w-80 lg:h-80 relative">
             {/* Background with gradient and blur effect */}
             <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/20 to-teal-500/20 backdrop-blur-xl rounded-full border border-white/10" />
             
@@ -354,34 +348,32 @@ const HeroSection = () => {
                 className="object-cover"
                 priority
                 onError={() => {
-                  // Handle image load error
                   console.log('Profile image not found');
                 }}
               />
-              
             </div>
-            
+            </div>
+
             {/* Quick Skills Badges */}
             <motion.div
-              className="absolute -bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2 flex-wrap justify-center"
-              initial={{ opacity: 0, y: 20 }}
+              className="flex gap-2 flex-wrap justify-center"
+              initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1.8, duration: 0.8 }}
+              transition={{ delay: 1.8, duration: 0.5 }}
             >
               {['React', 'Python', 'AWS', 'Next.js'].map((skill, index) => (
                 <motion.span
                   key={skill}
-                  className="px-2 py-1 text-xs bg-white/10 backdrop-blur-sm border border-white/20 rounded-full text-white"
+                  className="px-2 py-1 text-xs bg-white/10 backdrop-blur-sm border border-white/20 rounded-full text-white whitespace-nowrap"
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 2 + index * 0.1 }}
-                  whileHover={{ scale: 1.05 }}
+                  whileHover={{ scale: 1.1 }}
                 >
                   {skill}
                 </motion.span>
               ))}
             </motion.div>
-            
           </motion.div>
         </div>
       </div>

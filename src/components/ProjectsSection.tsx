@@ -114,8 +114,8 @@ const ProjectsSection = () => {
     } else {
       isMoving.current = true;
       animate(x, targetX, {
-        duration: 0.45,
-        ease: [0.25, 0.1, 0.25, 1],
+        duration: 0.28,
+        ease: [0.4, 0, 0.2, 1],
         onComplete: () => {
           // After animation ends, if we're in clone territory → silent jump to real item
           let newV = vIdx;
@@ -216,7 +216,7 @@ const ProjectsSection = () => {
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.3 }}
+          transition={{ duration: 0.3, delay: 0.1 }}
           className="text-center mt-14"
         >
           <div className="bg-gradient-to-br from-cyan-500/10 to-teal-500/10 backdrop-blur-lg border border-white/10 rounded-2xl p-8">
