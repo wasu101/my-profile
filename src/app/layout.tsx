@@ -8,7 +8,7 @@ import { LanguageProvider } from "@/contexts/LanguageContext";
 
 const kanit = Anuphan({
   subsets: ["thai", "latin"],
-  weight: ["200", "300", "400", "500", "600", "700"],
+  weight: ["400", "500", "700"],
   variable: "--font-kanit",
   display: "swap",
 });

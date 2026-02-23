@@ -78,7 +78,7 @@ const SkillsSection = () => {
               viewport={{ once: true, margin: '-40px' }}
               transition={{ duration: 0.4, delay: index * 0.04 }}
               whileHover={{ y: -6, scale: 1.08, transition: { duration: 0.2 } }}
-              className="group flex flex-col items-center gap-2 bg-white/5 hover:bg-white/10 backdrop-blur-md border border-white/10 hover:border-cyan-500/40 rounded-2xl p-4 w-20 sm:w-24 cursor-default transition-colors duration-300"
+              className="group flex flex-col items-center gap-2 bg-zinc-800/60 hover:bg-zinc-700/70 border border-white/10 hover:border-cyan-500/40 rounded-2xl p-4 w-20 sm:w-24 cursor-default transition-colors duration-300"
             >
               <div className={`w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-xl transition-colors duration-300 ${'whiteBg' in skill && skill.whiteBg ? 'bg-white/90 p-1.5' : ''}`}>
                 <Image

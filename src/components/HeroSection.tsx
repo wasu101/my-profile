@@ -90,10 +90,20 @@ function SpeedGrid() {
       };
     }
 
+    const isMobile = window.innerWidth < 768;
+    const count = isMobile ? 5 : PARTICLE_COUNT;
     const particles: Particle[] = [];
-    for (let i = 0; i < PARTICLE_COUNT; i++) particles.push(spawnParticle(true));
+    for (let i = 0; i < count; i++) particles.push(spawnParticle(true));
+
+    let visible = true;
+    const observer = new IntersectionObserver(
+      ([entry]) => { visible = entry.isIntersecting; },
+      { threshold: 0 }
+    );
+    observer.observe(canvas);
 
     const draw = (timestamp: number) => {
+      if (!visible) { animId = requestAnimationFrame(draw); return; }
       // delta time in seconds, capped at 50ms to avoid huge jumps after tab switch
       const delta = lastTimestamp ? Math.min((timestamp - lastTimestamp) / 1000, 0.05) : 0;
       lastTimestamp = timestamp;
@@ -210,6 +220,7 @@ function SpeedGrid() {
     return () => {
       cancelAnimationFrame(animId);
       window.removeEventListener('resize', resize);
+      observer.disconnect();
     };
   }, []);
 
@@ -347,6 +358,7 @@ const HeroSection = () => {
                 fill
                 className="object-cover"
                 priority
+                sizes="(max-width: 640px) 192px, (max-width: 768px) 224px, (max-width: 1024px) 256px, 320px"
                 onError={() => {
                   console.log('Profile image not found');
                 }}
@@ -364,7 +376,7 @@ const HeroSection = () => {
               {['React', 'Python', 'AWS', 'Next.js'].map((skill, index) => (
                 <motion.span
                   key={skill}
-                  className="px-2 py-1 text-xs bg-white/10 backdrop-blur-sm border border-white/20 rounded-full text-white whitespace-nowrap"
+                  className="px-2 py-1 text-xs bg-zinc-800/80 border border-white/20 rounded-full text-white whitespace-nowrap"
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 2 + index * 0.1 }}

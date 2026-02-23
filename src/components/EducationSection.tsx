@@ -82,7 +82,7 @@ const EducationSection = () => {
                 </div>
               )}
 
-              <Card className="bg-white/5 backdrop-blur-sm border-white/10 hover:border-cyan-500/30 transition-all duration-300 h-full">
+              <Card className="bg-zinc-900/80 border-white/10 hover:border-cyan-500/30 transition-all duration-300 h-full">
                 <CardContent className="p-6 flex flex-col h-full">
                   {/* Header with Icon */}
                   <div className="flex items-center gap-3 mb-4">

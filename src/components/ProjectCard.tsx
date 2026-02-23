@@ -78,7 +78,7 @@ const ProjectCard = ({ title, description, tech, demoLink, image, index }: Proje
       transition={{ duration: 0.2 }}
       className="h-full"
     >
-      <Card className="h-full backdrop-blur-lg bg-white/5 border-white/10 hover:bg-white/10 transition-all duration-300 overflow-hidden group">
+      <Card className="h-full bg-zinc-900/80 border-white/10 hover:bg-zinc-800/90 transition-all duration-300 overflow-hidden group">
         {/* Project Image */}
         <div className="relative h-48 overflow-hidden">
           {image ? (

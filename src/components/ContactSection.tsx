@@ -75,7 +75,7 @@ const ContactSection = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay, duration: 0.5 }}
-              className="group bg-white/5 hover:bg-white/10 backdrop-blur-md border border-white/10 hover:border-cyan-500/30 rounded-2xl p-6 flex flex-col items-center gap-3 transition-all duration-300"
+              className="group bg-zinc-800/60 hover:bg-zinc-700/70 border border-white/10 hover:border-cyan-500/30 rounded-2xl p-6 flex flex-col items-center gap-3 transition-all duration-300"
             >
               <div className="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center">
                 <Icon className="w-5 h-5 text-cyan-400" />

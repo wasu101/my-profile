@@ -83,7 +83,7 @@ const AboutSection = () => {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="mt-8 max-w-4xl mx-auto"
           >
-            <div className="bg-gradient-to-br from-cyan-500/10 to-teal-500/10 backdrop-blur-lg border border-white/10 rounded-2xl p-6">
+            <div className="bg-gradient-to-br from-cyan-500/10 to-teal-500/10 bg-zinc-900/80 border border-white/10 rounded-2xl p-6">
               <p className="text-gray-300 leading-relaxed text-lg">
                 {t(
                   'สวัสดีครับ! ผมวรกันต์ นาไทร นักพัฒนาซอฟต์แวร์และ IT Infrastructure Specialist ที่มีประสบการณ์ในการพัฒนาระบบขนาดใหญ่ ตั้งแต่ Web Application, AI/ML Integration ไปจนถึงการจัดการระบบ Cloud และ Database ผมมีความชื่นชอบในการเรียนรู้เทคโนโลยีใหม่และแก้ไขปัญหาที่ซับซ้อน พร้อมที่จะสร้างสรรค์โซลูชันที่ตอบโจทย์ทุกความต้องการ',

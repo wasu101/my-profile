@@ -7,9 +7,10 @@ const ParticlesBackground = () => {
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
+
+    const isMobile = window.innerWidth < 768;
 
     const setCanvasSize = () => {
       canvas.width = window.innerWidth;
@@ -18,151 +19,120 @@ const ParticlesBackground = () => {
     setCanvasSize();
 
     interface Particle {
-      x: number;
-      y: number;
-      vx: number;
-      vy: number;
+      x: number; y: number;
+      vx: number; vy: number;
       radius: number;
-      alpha: number;
-      baseAlpha: number;
+      alpha: number; baseAlpha: number;
       pulse: number;
+      colorIdx: number;
     }
 
-    const particles: Particle[] = [];
-    const particleCount = 25; // ลดจำนวนลง
-    const maxDistance = 150; // เพิ่มระยะห่าง
-    const colors = [
-      { r: 6, g: 182, b: 212 },    // Cyan
-      { r: 79, g: 70, b: 229 },    // Indigo  
-      { r: 59, g: 130, b: 246 },   // Blue
-      { r: 20, g: 184, b: 166 },   // Teal
-    ];
+    // Fewer particles, especially on mobile
+    const particleCount = isMobile ? 10 : 20;
+    const maxDistance   = 120;
+    const COLORS = [
+      [6,   182, 212],
+      [79,  70,  229],
+      [59,  130, 246],
+      [20,  184, 166],
+    ] as const;
 
-    // สร้าง particles
-    for (let i = 0; i < particleCount; i++) {
-      const baseAlpha = Math.random() * 0.3 + 0.1; // ลด opacity
-      particles.push({
+    const particles: Particle[] = Array.from({ length: particleCount }, (_, i) => {
+      const baseAlpha = Math.random() * 0.25 + 0.08;
+      return {
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        vx: (Math.random() - 0.5) * 0.3, // ลดความเร็ว
-        vy: (Math.random() - 0.5) * 0.3,
-        radius: Math.random() * 1.5 + 0.5, // ลดขนาด
+        vx: (Math.random() - 0.5) * 0.25,
+        vy: (Math.random() - 0.5) * 0.25,
+        radius: Math.random() * 1.2 + 0.5,
         alpha: baseAlpha,
-        baseAlpha: baseAlpha,
+        baseAlpha,
         pulse: Math.random() * Math.PI * 2,
-      });
-    }
+        colorIdx: i % COLORS.length,
+      };
+    });
 
-    let animationId: number;
+    let animId: number;
+    let lastTs = 0;
+    let visible = true;
 
-    const animate = () => {
-      // Clear with subtle fade
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.02)'; // ลด fade effect
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    const observer = new IntersectionObserver(
+      ([e]) => { visible = e.isIntersecting; },
+      { threshold: 0 }
+    );
+    observer.observe(canvas);
 
-      // Update and draw particles
-      particles.forEach((particle, index) => {
-        // Gentle movement
-        particle.x += particle.vx;
-        particle.y += particle.vy;
+    // Pre-compute distance squared to avoid sqrt in most cases
+    const maxDistSq = maxDistance * maxDistance;
 
-        // Smooth edge wrapping
-        if (particle.x < -50) particle.x = canvas.width + 50;
-        if (particle.x > canvas.width + 50) particle.x = -50;
-        if (particle.y < -50) particle.y = canvas.height + 50;
-        if (particle.y > canvas.height + 50) particle.y = -50;
+    const animate = (ts: number) => {
+      if (!visible) { animId = requestAnimationFrame(animate); return; }
 
-        // Subtle pulse animation
-        particle.pulse += 0.02;
-        particle.alpha = particle.baseAlpha + Math.sin(particle.pulse) * 0.1;
+      const delta = lastTs ? Math.min((ts - lastTs) / 16.67, 3) : 1; // normalize to 60fps
+      lastTs = ts;
 
-        // Choose random color
-        const color = colors[index % colors.length];
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        // Draw elegant particle with soft glow
-        const gradient = ctx.createRadialGradient(
-          particle.x, particle.y, 0,
-          particle.x, particle.y, particle.radius * 6
-        );
-        
-        gradient.addColorStop(0, `rgba(${color.r}, ${color.g}, ${color.b}, ${particle.alpha * 0.8})`);
-        gradient.addColorStop(0.3, `rgba(${color.r}, ${color.g}, ${color.b}, ${particle.alpha * 0.4})`);
-        gradient.addColorStop(0.7, `rgba(${color.r}, ${color.g}, ${color.b}, ${particle.alpha * 0.1})`);
-        gradient.addColorStop(1, `rgba(${color.r}, ${color.g}, ${color.b}, 0)`);
+      // Move particles
+      for (const p of particles) {
+        p.x += p.vx * delta;
+        p.y += p.vy * delta;
+        if (p.x < -50) p.x = canvas.width + 50;
+        if (p.x > canvas.width + 50) p.x = -50;
+        if (p.y < -50) p.y = canvas.height + 50;
+        if (p.y > canvas.height + 50) p.y = -50;
+        p.pulse += 0.018 * delta;
+        p.alpha = p.baseAlpha + Math.sin(p.pulse) * 0.07;
+      }
 
-        ctx.fillStyle = gradient;
-        ctx.beginPath();
-        ctx.arc(particle.x, particle.y, particle.radius * 6, 0, Math.PI * 2);
-        ctx.fill();
-
-        // Draw subtle connections
-        for (let j = index + 1; j < particles.length; j++) {
-          const other = particles[j];
-          const dx = particle.x - other.x;
-          const dy = particle.y - other.y;
-          const distance = Math.sqrt(dx * dx + dy * dy);
-
-          if (distance < maxDistance) {
-            const opacity = (1 - distance / maxDistance) * 0.1; // ลด opacity ของเส้น
-            const avgColor = {
-              r: Math.floor((color.r + colors[j % colors.length].r) / 2),
-              g: Math.floor((color.g + colors[j % colors.length].g) / 2),
-              b: Math.floor((color.b + colors[j % colors.length].b) / 2)
-            };
-
-            // Gradient line
-            const lineGradient = ctx.createLinearGradient(
-              particle.x, particle.y, other.x, other.y
-            );
-            lineGradient.addColorStop(0, `rgba(${avgColor.r}, ${avgColor.g}, ${avgColor.b}, ${opacity})`);
-            lineGradient.addColorStop(0.5, `rgba(${avgColor.r}, ${avgColor.g}, ${avgColor.b}, ${opacity * 0.5})`);
-            lineGradient.addColorStop(1, `rgba(${avgColor.r}, ${avgColor.g}, ${avgColor.b}, ${opacity})`);
-
-            ctx.strokeStyle = lineGradient;
-            ctx.lineWidth = 0.5; // เส้นบางลง
+      // Draw connection lines first (no gradient — plain rgba for perf)
+      for (let i = 0; i < particles.length; i++) {
+        const a = particles[i];
+        for (let j = i + 1; j < particles.length; j++) {
+          const b = particles[j];
+          const dx = a.x - b.x;
+          const dy = a.y - b.y;
+          const distSq = dx * dx + dy * dy;
+          if (distSq < maxDistSq) {
+            const opacity = (1 - Math.sqrt(distSq) / maxDistance) * 0.08;
+            const [r, g, bl] = COLORS[a.colorIdx];
+            ctx.strokeStyle = `rgba(${r},${g},${bl},${opacity.toFixed(2)})`;
+            ctx.lineWidth = 0.5;
             ctx.beginPath();
-            ctx.moveTo(particle.x, particle.y);
-            ctx.lineTo(other.x, other.y);
+            ctx.moveTo(a.x, a.y);
+            ctx.lineTo(b.x, b.y);
             ctx.stroke();
           }
         }
-      });
+      }
 
-      // Add floating orbs occasionally
-      if (Math.random() < 0.001) {
-        const color = colors[Math.floor(Math.random() * colors.length)];
-        const x = Math.random() * canvas.width;
-        const y = Math.random() * canvas.height;
-        
-        const orbGradient = ctx.createRadialGradient(x, y, 0, x, y, 30);
-        orbGradient.addColorStop(0, `rgba(${color.r}, ${color.g}, ${color.b}, 0.05)`);
-        orbGradient.addColorStop(1, `rgba(${color.r}, ${color.g}, ${color.b}, 0)`);
-        
-        ctx.fillStyle = orbGradient;
+      // Draw particles as simple circles (no radial gradient)
+      for (const p of particles) {
+        const [r, g, b] = COLORS[p.colorIdx];
         ctx.beginPath();
-        ctx.arc(x, y, 30, 0, Math.PI * 2);
+        ctx.arc(p.x, p.y, p.radius * 3, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${r},${g},${b},${(p.alpha * 0.6).toFixed(2)})`;
         ctx.fill();
       }
 
-      animationId = requestAnimationFrame(animate);
+      animId = requestAnimationFrame(animate);
     };
 
-    animate();
+    animId = requestAnimationFrame(animate);
 
     const handleResize = () => {
       setCanvasSize();
-      // Redistribute particles on resize
-      particles.forEach(particle => {
-        if (particle.x > canvas.width) particle.x = Math.random() * canvas.width;
-        if (particle.y > canvas.height) particle.y = Math.random() * canvas.height;
-      });
+      for (const p of particles) {
+        if (p.x > canvas.width)  p.x = Math.random() * canvas.width;
+        if (p.y > canvas.height) p.y = Math.random() * canvas.height;
+      }
     };
-
     window.addEventListener('resize', handleResize);
 
     return () => {
+      cancelAnimationFrame(animId);
       window.removeEventListener('resize', handleResize);
-      if (animationId) cancelAnimationFrame(animationId);
+      observer.disconnect();
     };
   }, []);
 
@@ -170,12 +140,9 @@ const ParticlesBackground = () => {
     <canvas
       ref={canvasRef}
       className="fixed inset-0 pointer-events-none z-0 opacity-20"
-      style={{
-        background: 'transparent',
-        mixBlendMode: 'screen' // เพิ่มเอฟเฟกต์หรูหรา
-      }}
     />
   );
 };
 
 export default ParticlesBackground;
+
