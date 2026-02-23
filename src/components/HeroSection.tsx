@@ -242,7 +242,7 @@ const HeroSection = () => {
       <SpeedGrid />
       {/* Vignette overlay so edges fade dark */}
       <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse 80% 60% at 50% 50%, transparent 30%, rgba(9,9,11,0.7) 100%)' }} />
-      <div className="max-w-7xl mx-auto w-full">
+      <div className="max-w-7xl mx-auto w-full relative z-10">
         <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-12">
           {/* Text Content */}
           <motion.div 
