@@ -8,6 +8,7 @@ import ProjectsSection from '@/components/ProjectsSection';
 import ContactSection from '@/components/ContactSection';
 import ScrollProgress from "@/components/ScrollProgress";
 import Header from "@/components/Header";
+import SplashLoader from "@/components/SplashLoader";
 
 const fadeUp: Variants = {
   hidden: { opacity: 0, y: 28 },
@@ -30,6 +31,7 @@ export default function Home() {
 
   return (
     <MotionConfig reducedMotion="user">
+      <SplashLoader />
       <div className="min-h-screen bg-brut-cream text-brut-ink relative pb-8">
         {/* Fixed UI */}
         <div className="fixed top-0 left-0 right-0 z-50">

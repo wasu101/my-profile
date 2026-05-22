@@ -36,7 +36,7 @@ const Footer = () => {
 <span className="text-zinc-500">&#123;</span>{'\n'}  <span className="text-brut-yellow">&quot;name&quot;</span>: <span className="text-[#B4FF39]">&quot;{t('วรกันต์ นาไทร', 'Worrakan Nasai')}&quot;</span>,{'\n'}  <span className="text-brut-yellow">&quot;role&quot;</span>: <span className="text-[#B4FF39]">&quot;full-stack + it-specialist&quot;</span>,{'\n'}  <span className="text-brut-yellow">&quot;year&quot;</span>: <span className="text-brut-pink">{year}</span>{'\n'}<span className="text-zinc-500">&#125;</span>
           </pre>
           <p className="text-[10px] sm:text-xs mt-3 text-brut-cream/40">
-            // © {year} · {t('สงวนลิขสิทธิ์ทั้งหมด', 'all rights reserved')} · EOF
+            {'// © '}{year} · {t('สงวนลิขสิทธิ์ทั้งหมด', 'all rights reserved')} · EOF
           </p>
         </div>
 

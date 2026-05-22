@@ -47,7 +47,7 @@ const ContactSection = () => {
                   <div className="w-10 h-10 bg-brut-ink text-brut-yellow brut-border-2 flex items-center justify-center">
                     <Icon className="w-5 h-5" />
                   </div>
-                  <span className="text-[10px] text-brut-ink/60 lowercase">// {label}</span>
+                  <span className="text-[10px] text-brut-ink/60 lowercase">{'// '}{label}</span>
                 </div>
                 <div className="text-xs text-brut-ink/70">
                   <span className="text-brut-pink">const</span>{' '}
