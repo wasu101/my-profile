@@ -1,5 +1,6 @@
 ﻿'use client';
-import { motion, MotionConfig, type Variants } from 'framer-motion';
+import { motion, MotionConfig, useScroll, useTransform, type Variants } from 'framer-motion';
+import { useEffect, useState } from 'react';
 import HeroSection from '@/components/HeroSection';
 import AboutSection from '@/components/AboutSection';
 import SkillsSection from '@/components/SkillsSection';
@@ -9,32 +10,45 @@ import ScrollProgress from "@/components/ScrollProgress";
 import Header from "@/components/Header";
 
 const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 24 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
+  hidden: { opacity: 0, y: 28 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: "easeOut" } },
 };
 
 const sections = [AboutSection, SkillsSection, ProjectsSection, ContactSection];
 
 export default function Home() {
+  const [showTop, setShowTop] = useState(false);
+  const { scrollY } = useScroll();
+  const yShape = useTransform(scrollY, [0, 800], [0, -100]);
+
+  useEffect(() => {
+    const handler = () => setShowTop(window.scrollY > 600);
+    handler();
+    window.addEventListener('scroll', handler, { passive: true });
+    return () => window.removeEventListener('scroll', handler);
+  }, []);
+
   return (
-    // MotionConfig reducedMotion="user" → framer-motion อ่านค่า OS เอง
-    // ไม่ต้อง useReducedMotion() → ไม่มี hydration mismatch
-    /////////
     <MotionConfig reducedMotion="user">
-      <div className="min-h-screen bg-zinc-950 text-white">
+      <div className="min-h-screen bg-brut-cream text-brut-ink relative pb-8">
         {/* Fixed UI */}
         <div className="fixed top-0 left-0 right-0 z-50">
           <ScrollProgress />
           <Header />
         </div>
 
-        {/* Subtle background glow */}
-        <div className="fixed inset-0 z-0 pointer-events-none">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-cyan-600/10 rounded-full blur-[120px]" />
-          <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-blue-600/8 rounded-full blur-[100px]" />
-        </div>
+        {/* Decorative parallax shapes */}
+        <motion.div
+          style={{ y: yShape }}
+          aria-hidden
+          className="pointer-events-none fixed -z-0 top-1/3 -left-10 w-24 h-24 bg-brut-pink brut-border brut-shadow-md rotate-12 hidden lg:block"
+        />
+        <motion.div
+          style={{ y: yShape }}
+          aria-hidden
+          className="pointer-events-none fixed -z-0 top-2/3 -right-8 w-20 h-20 bg-brut-cyan brut-border brut-shadow-md rounded-full hidden lg:block"
+        />
 
-        {/* Main Content */}
         <main className="relative z-10">
           <motion.div initial="hidden" animate="visible" variants={fadeUp}>
             <HeroSection />
@@ -55,15 +69,15 @@ export default function Home() {
 
         {/* Scroll to top */}
         <motion.button
-          className="fixed bottom-8 right-8 z-40 w-10 h-10 bg-cyan-600 hover:bg-cyan-500 rounded-full flex items-center justify-center shadow-lg transition-colors"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.5 }}
+          className="fixed bottom-10 right-4 sm:bottom-14 sm:right-8 z-40 w-11 h-11 sm:w-14 sm:h-14 bg-brut-yellow text-brut-ink brut-border brut-shadow-md brut-hover flex items-center justify-center"
+          initial={{ opacity: 0, scale: 0 }}
+          animate={{ opacity: showTop ? 1 : 0, scale: showTop ? 1 : 0 }}
+          transition={{ duration: 0.25 }}
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           aria-label="Scroll to top"
         >
-          <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10l7-7m0 0l7 7m-7-7v18" />
+          <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="square" strokeLinejoin="miter" strokeWidth={3} d="M5 10l7-7m0 0l7 7m-7-7v18" />
           </svg>
         </motion.button>
       </div>

@@ -5,211 +5,108 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { useState, useEffect } from "react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 
+const navItemsData = [
+  { href: '#about',    path: '~/about',    th: 'เกี่ยวกับ',     en: 'about' },
+  { href: '#skills',   path: '~/skills',   th: 'ทักษะ',          en: 'skills' },
+  { href: '#projects', path: '~/projects', th: 'ผลงาน',          en: 'projects' },
+  { href: '#contact',  path: '~/contact',  th: 'ติดต่อ',         en: 'contact' },
+];
+
 const Header = () => {
   const { language, toggleLanguage, t } = useLanguage();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
-    
-    window.addEventListener('scroll', handleScroll);
+    const handleScroll = () => setIsScrolled(window.scrollY > 20);
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const navItems = [
-    { href: '/', label: t('หน้าแรก', 'Home') },
-    { href: '#about', label: t('เกี่ยวกับ', 'About') },
-    { href: '#skills', label: t('ทักษะ', 'Skills') },
-    { href: '#experience', label: t('ประสบการณ์', 'Experience') },
-    { href: '#education', label: t('การศึกษา', 'Education') },
-    { href: '#projects', label: t('ผลงาน', 'Projects') },
-    { href: '#contact', label: t('ติดต่อ', 'Contact') },
-  ];
-
   return (
-    <motion.header 
-      initial={{ y: -100 }}
+    <motion.header
+      initial={{ y: -120 }}
       animate={{ y: 0 }}
-      transition={{ duration: 0.5 }}
-      className={`fixed top-0 w-full z-50 transition-all duration-300 ${
-        isScrolled 
-          ? 'bg-black/80 backdrop-blur-xl border-b border-white/10 py-4' 
-          : 'bg-transparent py-6'
+      transition={{ duration: 0.5, ease: 'easeOut' }}
+      className={`w-full transition-all duration-200 ${
+        isScrolled
+          ? 'bg-brut-cream border-b-[3px] border-brut-ink py-2'
+          : 'bg-transparent py-3'
       }`}
     >
-      <nav className="max-w-7xl mx-auto px-6 md:px-10">
-        <div className="flex justify-between items-center">
+      <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10">
+        <div className="flex justify-between items-center gap-3">
           {/* Logo */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.2 }}
-          >
-            <Link href="/" className="group">
-              <h1 className="text-xl md:text-2xl font-bold relative">
-                <span className="bg-gradient-to-r from-cyan-400 via-teal-400 to-cyan-400 bg-clip-text text-transparent">
-                  {t('W', 'W')}
-                </span>
-                <span className="text-white/60 font-light">
-                  {t('orrakan', 'orrakan')}
-                </span>
-                <motion.div
-                  className="absolute -bottom-1 left-0 h-0.5 bg-gradient-to-r from-cyan-400 to-teal-400"
-                  initial={{ width: 0 }}
-                  whileHover={{ width: '100%' }}
-                  transition={{ duration: 0.3 }}
-                />
-              </h1>
-            </Link>
-          </motion.div>
+          <Link href="/" className="group inline-flex items-center gap-2 min-w-0">
+            <span className="bg-brut-ink text-brut-yellow font-mono-brut font-black text-sm sm:text-base w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center brut-border brut-shadow-sm brut-hover flex-shrink-0">
+              &lt;/&gt;
+            </span>
+            <span className="hidden xs:inline sm:inline font-mono-brut font-bold text-sm sm:text-base tracking-tight truncate">
+              <span className="text-brut-ink">{t('วรกันต์', 'worrakan')}</span>
+              <span className="bg-brut-yellow text-brut-ink px-1 ml-0.5">.me</span>
+            </span>
+          </Link>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-8">
-            <motion.nav
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-              className="flex gap-1"
-            >
-              {navItems.map((item, index) => (
-                <motion.div
-                  key={item.href}
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.1 * index }}
-                >
-                  <Link
-                    href={item.href}
-                    className="group relative px-4 py-2 text-gray-300 hover:text-white transition-all duration-300"
-                  >
-                    <span className="relative z-10">{item.label}</span>
-                    <motion.div
-                      className="absolute inset-0 bg-gradient-to-r from-cyan-500/20 to-teal-500/20 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"
-                      whileHover={{ scale: 1.05 }}
-                    />
-                    <motion.div
-                      className="absolute bottom-0 left-1/2 transform -translate-x-1/2 h-0.5 bg-gradient-to-r from-cyan-400 to-teal-400"
-                      initial={{ width: 0 }}
-                      whileHover={{ width: '80%' }}
-                      transition={{ duration: 0.3 }}
-                    />
-                  </Link>
-                </motion.div>
-              ))}
-            </motion.nav>
+          {/* Desktop Nav */}
+          <div className="hidden md:flex items-center gap-1.5 lg:gap-2">
+            {navItemsData.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="font-mono-brut text-[11px] lg:text-xs px-2 lg:px-3 py-1.5 bg-white brut-border-2 brut-shadow-sm brut-hover text-brut-ink lowercase whitespace-nowrap"
+              >
+                <span className="text-brut-pink">$</span> <span className="font-bold">cd</span> {item.path}
+              </Link>
+            ))}
 
-            {/* Language Switcher */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.5 }}
-              className="relative"
+            {/* Language switch */}
+            <button
+              onClick={toggleLanguage}
+              className="ml-1 lg:ml-2 bg-brut-ink text-brut-yellow font-mono-brut font-bold text-[11px] lg:text-xs px-2.5 lg:px-3 py-1.5 brut-border-2 brut-shadow-sm brut-hover whitespace-nowrap"
+              aria-label="Toggle language"
             >
-              <div className="flex items-center bg-white/5 backdrop-blur-md rounded-full p-1 border border-white/10">
-                <button
-                  onClick={() => language === 'en' && toggleLanguage()}
-                  className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-300 ${
-                    language === 'th'
-                      ? 'bg-gradient-to-r from-cyan-500 to-teal-500 text-white shadow-lg'
-                      : 'text-gray-400 hover:text-white'
-                  }`}
-                >
-                  ไทย
-                </button>
-                <button
-                  onClick={() => language === 'th' && toggleLanguage()}
-                  className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-300 ${
-                    language === 'en'
-                      ? 'bg-gradient-to-r from-cyan-500 to-teal-500 text-white shadow-lg'
-                      : 'text-gray-400 hover:text-white'
-                  }`}
-                >
-                  EN
-                </button>
-              </div>
-            </motion.div>
+              lang=&apos;{language}&apos;
+            </button>
           </div>
 
-          {/* Mobile Menu Button */}
+          {/* Mobile menu button */}
           <button
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden text-white p-2"
+            onClick={() => setIsMobileMenuOpen((v) => !v)}
+            className="md:hidden bg-brut-yellow text-brut-ink p-2 brut-border-2 brut-shadow-sm brut-hover"
+            aria-label="Toggle menu"
           >
-            {isMobileMenuOpen ? (
-              <XMarkIcon className="w-6 h-6" />
-            ) : (
-              <Bars3Icon className="w-6 h-6" />
-            )}
+            {isMobileMenuOpen ? <XMarkIcon className="w-5 h-5" /> : <Bars3Icon className="w-5 h-5" />}
           </button>
         </div>
 
-        {/* Mobile Menu */}
+        {/* Mobile menu */}
         <AnimatePresence>
           {isMobileMenuOpen && (
             <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.3 }}
-              className="md:hidden mt-4 overflow-hidden"
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.2 }}
+              className="md:hidden mt-3"
             >
-              <div className="bg-black/50 backdrop-blur-xl rounded-lg border border-white/10 p-4">
-                {navItems.map((item, index) => (
-                  <motion.div
+              <div className="bg-white brut-border brut-shadow-md p-3 grid gap-2">
+                {navItemsData.map((item) => (
+                  <Link
                     key={item.href}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.05 * index }}
+                    href={item.href}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="block py-2 px-3 font-mono-brut text-sm brut-border-2 bg-white text-brut-ink"
                   >
-                    <Link
-                      href={item.href}
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className="block py-3 px-4 text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-300"
-                    >
-                      {item.label}
-                    </Link>
-                  </motion.div>
+                    <span className="text-brut-pink">$</span> <span className="font-bold">cd</span> {item.path}
+                  </Link>
                 ))}
-                
-                {/* Mobile Language Switcher */}
-                <motion.div
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.35 }}
-                  className="mt-4 pt-4 border-t border-white/10"
+                <button
+                  onClick={() => { toggleLanguage(); setIsMobileMenuOpen(false); }}
+                  className="block py-2 px-3 font-mono-brut font-bold text-sm bg-brut-yellow text-brut-ink brut-border-2 text-center"
                 >
-                  <div className="flex items-center justify-center bg-white/5 backdrop-blur-md rounded-full p-1 border border-white/10">
-                    <button
-                      onClick={() => {
-                        if (language === 'en') toggleLanguage();
-                        setIsMobileMenuOpen(false);
-                      }}
-                      className={`px-6 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
-                        language === 'th'
-                          ? 'bg-gradient-to-r from-cyan-500 to-teal-500 text-white shadow-lg'
-                          : 'text-gray-400'
-                      }`}
-                    >
-                      ไทย
-                    </button>
-                    <button
-                      onClick={() => {
-                        if (language === 'th') toggleLanguage();
-                        setIsMobileMenuOpen(false);
-                      }}
-                      className={`px-6 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
-                        language === 'en'
-                          ? 'bg-gradient-to-r from-cyan-500 to-teal-500 text-white shadow-lg'
-                          : 'text-gray-400'
-                      }`}
-                    >
-                      EN
-                    </button>
-                  </div>
-                </motion.div>
+                  <span className="text-brut-pink">lang</span>.<span className="font-black">toggle</span>() <span className="text-zinc-500">{'// →'}</span> {language === 'th' ? 'EN' : 'TH'}
+                </button>
               </div>
             </motion.div>
           )}

@@ -1,6 +1,4 @@
-﻿'use client';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+'use client';
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { EyeIcon, CodeBracketIcon } from "@heroicons/react/24/outline";
@@ -14,176 +12,110 @@ interface ProjectCardProps {
   index: number;
 }
 
+const techColors = ['bg-brut-yellow', 'bg-brut-cyan', 'bg-brut-pink', 'bg-brut-lime', 'bg-brut-orange', 'bg-brut-violet'];
+const cardBg     = ['bg-brut-yellow', 'bg-brut-cyan', 'bg-brut-pink', 'bg-brut-lime', 'bg-brut-orange', 'bg-brut-violet'];
+
+const getTechLogo = (techName: string): string | null => {
+  const logoMap: Record<string, string> = {
+    'Python': 'python/python-original.svg',
+    'FastAPI': 'fastapi/fastapi-original.svg',
+    'Django': 'django/django-plain.svg',
+    'React': 'react/react-original.svg',
+    'Next.js': 'nextjs/nextjs-original.svg',
+    'TypeScript': 'typescript/typescript-original.svg',
+    'JavaScript': 'javascript/javascript-original.svg',
+    'Node.js': 'nodejs/nodejs-original.svg',
+    'PostgreSQL': 'postgresql/postgresql-original.svg',
+    'MySQL': 'mysql/mysql-original.svg',
+    'MongoDB': 'mongodb/mongodb-original.svg',
+    'OpenCV': 'opencv/opencv-original.svg',
+    'Docker': 'docker/docker-original.svg',
+    'Tailwind CSS': 'tailwindcss/tailwindcss-original.svg',
+    'Prisma': 'prisma/prisma-original.svg',
+    'WordPress': 'wordpress/wordpress-original.svg',
+    'Linux': 'linux/linux-original.svg',
+    'SQLite': 'sqlite/sqlite-original.svg',
+    'Git': 'git/git-original.svg',
+    'Flask': 'flask/flask-original.svg',
+    'Material-UI': 'materialui/materialui-original.svg',
+    'AWS Amplify': 'amazonwebservices/amazonwebservices-original-wordmark.svg',
+    'Amazon S3': 'amazonwebservices/amazonwebservices-original-wordmark.svg',
+    'AWS Cognito': 'amazonwebservices/amazonwebservices-original-wordmark.svg',
+    'Amazon EC2': 'amazonwebservices/amazonwebservices-original-wordmark.svg',
+    'Mailu': 'docker/docker-original.svg',
+  };
+  const slug = logoMap[techName];
+  return slug ? `https://raw.githubusercontent.com/devicons/devicon/master/icons/${slug}` : null;
+};
+
 const ProjectCard = ({ title, description, tech, demoLink, image, index }: ProjectCardProps) => {
-
-  // Tech logos mapping - ใช้ CDN เหมือน SkillsSection
-  const getTechLogo = (techName: string) => {
-    const logoMap: { [key: string]: string } = {
-      'Python': 'https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg',
-      'FastAPI': 'https://raw.githubusercontent.com/devicons/devicon/master/icons/fastapi/fastapi-original.svg',
-      'Django': 'https://raw.githubusercontent.com/devicons/devicon/master/icons/django/django-plain.svg',
-      'React': 'https://raw.githubusercontent.com/devicons/devicon/master/icons/react/react-original.svg',
-      'Next.js': 'https://raw.githubusercontent.com/devicons/devicon/master/icons/nextjs/nextjs-original.svg',
-      'TypeScript': 'https://raw.githubusercontent.com/devicons/devicon/master/icons/typescript/typescript-original.svg',
-      'JavaScript': 'https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-original.svg',
-      'Node.js': 'https://raw.githubusercontent.com/devicons/devicon/master/icons/nodejs/nodejs-original.svg',
-      'PostgreSQL': 'https://raw.githubusercontent.com/devicons/devicon/master/icons/postgresql/postgresql-original.svg',
-      'MySQL': 'https://raw.githubusercontent.com/devicons/devicon/master/icons/mysql/mysql-original.svg',
-      'MongoDB': 'https://raw.githubusercontent.com/devicons/devicon/master/icons/mongodb/mongodb-original.svg',
-      'OpenCV': 'https://raw.githubusercontent.com/devicons/devicon/master/icons/opencv/opencv-original.svg',
-      'Docker': 'https://raw.githubusercontent.com/devicons/devicon/master/icons/docker/docker-original.svg',
-      'Tailwind CSS': 'https://raw.githubusercontent.com/devicons/devicon/master/icons/tailwindcss/tailwindcss-original.svg',
-      'HTML/CSS': 'https://raw.githubusercontent.com/devicons/devicon/master/icons/html5/html5-original.svg',
-      'CSS': 'https://raw.githubusercontent.com/devicons/devicon/master/icons/css3/css3-original.svg',
-      'Machine Learning': 'https://raw.githubusercontent.com/devicons/devicon/master/icons/tensorflow/tensorflow-original.svg',
-      'Express': 'https://raw.githubusercontent.com/devicons/devicon/master/icons/express/express-original.svg',
-      'JWT': 'https://raw.githubusercontent.com/devicons/devicon/master/icons/jwt/jwt-original.svg',
-      'OAuth': 'https://raw.githubusercontent.com/devicons/devicon/master/icons/oauth/oauth-original.svg',
-      'Redis': 'https://raw.githubusercontent.com/devicons/devicon/master/icons/redis/redis-original.svg',
-      'Stripe': 'https://raw.githubusercontent.com/devicons/devicon/master/icons/stripe/stripe-original.svg',
-      'Prisma': 'https://raw.githubusercontent.com/devicons/devicon/master/icons/prisma/prisma-original.svg',
-      'WordPress': 'https://raw.githubusercontent.com/devicons/devicon/master/icons/wordpress/wordpress-original.svg',
-      'PHP': 'https://raw.githubusercontent.com/devicons/devicon/master/icons/php/php-original.svg',
-      'Linux': 'https://raw.githubusercontent.com/devicons/devicon/master/icons/linux/linux-original.svg',
-      'Postfix': 'https://raw.githubusercontent.com/devicons/devicon/master/icons/linux/linux-original.svg',
-      'Dovecot': 'https://raw.githubusercontent.com/devicons/devicon/master/icons/linux/linux-original.svg',
-      'Roundcube': 'https://raw.githubusercontent.com/devicons/devicon/master/icons/php/php-original.svg',
-      'Responsive Design': 'https://raw.githubusercontent.com/devicons/devicon/master/icons/css3/css3-original.svg',
-      'Server Management': 'https://raw.githubusercontent.com/devicons/devicon/master/icons/linux/linux-original.svg',
-      'Network': 'https://raw.githubusercontent.com/devicons/devicon/master/icons/linux/linux-original.svg',
-      'Database': 'https://raw.githubusercontent.com/devicons/devicon/master/icons/postgresql/postgresql-original.svg',
-      'SQLite': 'https://raw.githubusercontent.com/devicons/devicon/master/icons/sqlite/sqlite-original.svg',
-      'Git': 'https://raw.githubusercontent.com/devicons/devicon/master/icons/git/git-original.svg',
-      'Flask': 'https://raw.githubusercontent.com/devicons/devicon/master/icons/flask/flask-original.svg',
-      'shadcn/ui': 'https://raw.githubusercontent.com/devicons/devicon/master/icons/react/react-original.svg',
-      'Material-UI': 'https://raw.githubusercontent.com/devicons/devicon/master/icons/materialui/materialui-original.svg',
-      'AWS Amplify': 'https://raw.githubusercontent.com/devicons/devicon/master/icons/amazonwebservices/amazonwebservices-original-wordmark.svg',
-      'Amazon S3': 'https://raw.githubusercontent.com/devicons/devicon/master/icons/amazonwebservices/amazonwebservices-original-wordmark.svg',
-      'AWS Cognito': 'https://raw.githubusercontent.com/devicons/devicon/master/icons/amazonwebservices/amazonwebservices-original-wordmark.svg',
-      'Amazon EC2': 'https://raw.githubusercontent.com/devicons/devicon/master/icons/amazonwebservices/amazonwebservices-original-wordmark.svg',
-      'Mailu': 'https://raw.githubusercontent.com/devicons/devicon/master/icons/docker/docker-original.svg'
-    };
-    return logoMap[techName] || 'https://raw.githubusercontent.com/devicons/devicon/master/icons/devicon/devicon-original.svg';
-  };
-
-  // เช็คว่าควร invert color หรือไม่
-  const shouldInvertColor = (techName: string) => {
-    const invertList = ['Django', 'Next.js', 'Express', 'Flask', 'WordPress', 'Prisma', 'JWT', 'OAuth', 'shadcn/ui'];
-    return invertList.includes(techName);
-  };
-  
+  const bg = cardBg[index % cardBg.length];
   return (
     <motion.div
-      whileHover={{ y: -6 }}
-      transition={{ duration: 0.2 }}
+      whileHover={{ y: -5, rotate: index % 2 === 0 ? -1 : 1 }}
+      transition={{ type: 'spring', stiffness: 250, damping: 20 }}
       className="h-full"
     >
-      <Card className="h-full bg-zinc-900/80 border-white/10 hover:bg-zinc-800/90 transition-all duration-300 overflow-hidden group">
-        {/* Project Image */}
-        <div className="relative h-48 overflow-hidden">
+      <div className={`h-full flex flex-col brut-border brut-shadow-md ${bg}`}>
+        {/* Image / placeholder */}
+        <div className="relative h-44 sm:h-48 overflow-hidden border-b-[3px] border-brut-ink bg-white">
           {image ? (
-            <Image
-              src={image}
-              alt={title}
-              fill
-              className="object-cover transition-transform duration-300 group-hover:scale-110"
-            />
+            <Image src={image} alt={title} fill className="object-cover" />
           ) : (
-            <div className="h-full bg-gradient-to-br from-cyan-500/20 to-teal-500/20 flex items-center justify-center">
-              <CodeBracketIcon className="w-16 h-16 text-white/50" />
+            <div className="h-full w-full brut-stripes-thin flex items-center justify-center bg-white">
+              <div className="bg-brut-ink text-brut-cream p-3 brut-border-2">
+                <CodeBracketIcon className="w-10 h-10" />
+              </div>
             </div>
           )}
-          
-          {/* Gradient overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
-          
-          {/* Tech stack preview (floating icons) */}
-          <div className="absolute bottom-3 left-3 flex gap-2">
-            {tech.slice(0, 3).map((t, idx) => (
-              <motion.div
-                key={t}
-                initial={{ opacity: 0, scale: 0 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                transition={{ delay: index * 0.1 + idx * 0.1 }}
-                className="w-8 h-8 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center border border-white/20"
-              >
-                <div className="w-5 h-5 relative">
-                  <Image
-                    src={getTechLogo(t)}
-                    alt={t}
-                    width={20}
-                    height={20}
-                    className={`w-full h-full object-contain ${shouldInvertColor(t) ? 'filter invert' : ''}`}
-                    onError={(e) => {
-                      e.currentTarget.style.display = 'none';
-                    }}
-                  />
+          {/* Tech icons floating */}
+          <div className="absolute bottom-2 left-2 flex gap-1.5">
+            {tech.slice(0, 3).map((techName) => {
+              const logo = getTechLogo(techName);
+              if (!logo) return null;
+              return (
+                <div key={techName} className="w-8 h-8 bg-white brut-border-2 flex items-center justify-center">
+                  <Image src={logo} alt={techName} width={20} height={20} className="object-contain" />
                 </div>
-              </motion.div>
-            ))}
+              );
+            })}
             {tech.length > 3 && (
-              <div className="w-8 h-8 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center border border-white/20">
-                <span className="text-xs font-bold text-white">+{tech.length - 3}</span>
+              <div className="w-8 h-8 bg-brut-ink text-brut-cream brut-border-2 flex items-center justify-center text-[10px] font-black">
+                +{tech.length - 3}
               </div>
             )}
           </div>
         </div>
 
-        <CardHeader className="pb-4">
-          <CardTitle className="text-white text-lg">{title}</CardTitle>
-          <CardDescription className="text-gray-400 text-sm">{description}</CardDescription>
-        </CardHeader>
-
-        <CardContent className="pb-4">
-          {/* Tech stack with logos 
-          <div className="space-y-3">
-            <h4 className="text-sm font-semibold text-gray-300">Tech Stack:</h4>
-            <div className="flex flex-wrap gap-2">
-              {tech.map((t: string) => (
-                <motion.div
-                  key={t}
-                  whileHover={{ scale: 1.05 }}
-                  className="relative overflow-hidden"
-                >
-                  <Badge 
-                    variant="secondary" 
-                    className="bg-white/10 text-gray-200 border-white/20 flex items-center gap-2"
-                  >
-                    <div className="w-4 h-4 relative">
-                      <Image
-                        src={getTechLogo(t)}
-                        alt={t}
-                        width={16}
-                        height={16}
-                        className={`w-full h-full object-contain ${shouldInvertColor(t) ? 'filter invert' : ''}`}
-                        onError={(e) => {
-                          e.currentTarget.style.display = 'none';
-                        }}
-                      />
-                    </div>
-                    <span className="text-xs font-medium">{t}</span>
-                  </Badge>
-                </motion.div>
-              ))}
-            </div>
+        {/* Body */}
+        <div className="bg-white flex-1 p-4 sm:p-5 flex flex-col">
+          {/* commit hash header */}
+          <div className="flex items-center justify-between font-mono-brut text-[10px] text-zinc-500 mb-2 pb-1.5 border-b border-dashed border-zinc-300">
+            <span><span className="text-brut-pink">commit</span> {Math.abs((title.length * 9277 + index * 31337) % 0xfffffff).toString(16).padStart(7, '0').slice(0, 7)}</span>
+            <span>#{String(index + 1).padStart(3, '0')}</span>
           </div>
-          */}
-        </CardContent>
+          <h3 className="font-black uppercase text-lg leading-tight mb-2">{title}</h3>
+          <p className="text-sm text-zinc-700 font-medium mb-4 flex-1">{description}</p>
 
-        <CardFooter className="pt-0">
-          <Button 
-            variant="outline" 
-            size="sm"
-            className="w-full border-cyan-500/50 text-cyan-400 hover:bg-cyan-500/10 hover:text-cyan-300 transition-all" 
-            asChild
+          <div className="flex flex-wrap gap-1 sm:gap-1.5 mb-4">
+            {tech.slice(0, 5).map((t, i) => (
+              <span key={t} className={`font-mono-brut text-[9px] sm:text-[10px] px-1.5 sm:px-2 py-0.5 brut-border-2 lowercase ${techColors[i % techColors.length]}`}>
+                {t}
+              </span>
+            ))}
+          </div>
+
+          <a
+            href={demoLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center justify-center gap-2 bg-brut-ink text-brut-yellow font-mono-brut font-bold text-sm px-4 py-2 brut-border-2 brut-shadow-sm brut-hover"
           >
-            <a href={demoLink} className="flex items-center justify-center gap-2" target="_blank" rel="noopener noreferrer">
-              <EyeIcon className="w-4 h-4" />
-              Live Site
-            </a>
-          </Button>
-        </CardFooter>
-      </Card>
+            <EyeIcon className="w-4 h-4" />
+            <span className="text-brut-pink">$</span> open --live
+          </a>
+        </div>
+      </div>
     </motion.div>
   );
 };
